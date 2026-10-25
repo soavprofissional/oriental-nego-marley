@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#05060d">
+<title>ORIENTAL — Nego Marley</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- INTRO CINEMATOGRÁFICA -->
+<div id="intro" class="intro" aria-hidden="false">
+  <canvas id="stars" class="intro__stars"></canvas>
+  <div class="intro__nebula intro__nebula--a"></div>
+  <div class="intro__nebula intro__nebula--b"></div>
+
+  <div class="intro__planet-wrap" id="planetWrap">
+    <div class="solar" aria-hidden="true">
+      <div class="orbit orbit--1"><span class="satellite"></span></div>
+      <div class="orbit orbit--2"><span class="satellite satellite--gold"></span></div>
+      <div class="orbit orbit--3"><span class="satellite"></span></div>
+    </div>
+    <div class="planet" id="planet">
+      <div class="planet__base"></div>
+      <div class="planet__glow"></div>
+      <div class="planet__shadow"></div>
+    </div>
+  </div>
+
+  <div class="intro__city" id="city">
+    <div class="city__sky"></div>
+    <div class="city__lights"></div>
+    <div class="city__glow city__glow--red"></div>
+    <div class="city__glow city__glow--blue"></div>
+  </div>
+
+  <div class="intro__vignette"></div>
+
+  <div class="intro__ui">
+    <p class="intro__kicker">ORIENTAL</p>
+    <h1 class="intro__title">NEGOMARLEY</h1>
+    <p class="intro__subtitle" id="introSubtitle">Uma viagem do espaço ao Japão</p>
+  </div>
+
+  <button class="intro__skip" id="skipIntro" type="button">Pular introdução</button>
+  <button class="intro__sound" id="soundToggle" type="button" aria-pressed="false">Som: desligado</button>
+</div>
+
+<!-- INTERFACE PRINCIPAL -->
+<main id="main" class="main" hidden>
+  <div class="main__bg" aria-hidden="true"></div>
+  <div class="main__overlay" aria-hidden="true"></div>
+
+  <section class="hero">
+    <button class="hero__pendant" id="pendantBtn" type="button" aria-label="Abrir biscoito da sorte">
+      <span class="hero__cord"></span>
+      <img class="hero__pendant-img" src="assets/pingente.png" alt="Pingente de Nego Marley">
+      <span class="hero__pendant-glow"></span>
+    </button>
+    <p class="hero__hint">Clique no pingente para abrir seu biscoito da sorte japonês</p>
+    <p class="hero__kicker">ÁLBUM CONCEITUAL</p>
+    <h1 class="hero__title">ORIENTAL</h1>
+    <p class="hero__artist">NEGOMARLEY</p>
+    <p class="hero__tag">Experiência artística interativa</p>
+  </section>
+
+  <section class="enigma">
+    <div class="enigma__card">
+      <h2 class="enigma__title">O ENIGMA DO ORIGAMI</h2>
+      <p class="enigma__text">
+        Uma folha de papel guarda um segredo. Dobre-a com o olhar e revele o que ela esconde.
+      </p>
+
+      <div class="stage" id="stage">
+        <div class="stage__origami" id="origami" aria-label="Origami">
+          <svg viewBox="0 0 200 200" class="origami__svg" aria-hidden="true">
+            <polygon points="100,20 180,100 100,180 20,100" fill="none" stroke="rgba(212,175,55,0.9)" stroke-width="1.5"/>
+            <polygon points="100,20 140,100 100,180 60,100" fill="rgba(212,175,55,0.08)" stroke="rgba(212,175,55,0.6)" stroke-width="1"/>
+            <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(212,175,55,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
+            <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(212,175,55,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
+          </svg>
+          <span class="origami__label">ORIGAMI</span>
+        </div>
+
+        <canvas class="stage__particles" id="particles" aria-hidden="true"></canvas>
+
+        <div class="stage__pendant" id="pendantReveal" aria-hidden="true">
+          <img src="assets/pingente.png" alt="Pingente de Nego Marley">
+          <span class="stage__pendant-glow"></span>
+        </div>
+      </div>
+
+      <div class="enigma__actions">
+        <button class="btn btn--primary" id="transformBtn" type="button">Transformar origami</button>
+        <button class="btn btn--ghost" id="resetBtn" type="button">Reiniciar</button>
+      </div>
+
+      <div class="clue" id="clue" hidden>
+        <p class="clue__label">PRÓXIMA PISTA</p>
+        <p class="clue__text">
+          “O globo azul gira onde o sol nasce vermelho. Siga a grade dourada até o nome que não se diz duas vezes.”
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="progress" aria-label="Progresso">
+    <div class="progress__dots">
+      <span class="dot is-done" data-step="1"></span>
+      <span class="dot" data-step="2"></span>
+      <span class="dot" data-step="3"></span>
+      <span class="dot" data-step="4"></span>
+    </div>
+    <p class="progress__label" id="progressLabel">Etapa 1 de 4</p>
+  </section>
+
+  <section class="enigma enigma--2" id="enigma2" hidden>
+    <div class="enigma__card">
+      <h2 class="enigma__title">ENIGMA 02 · A GRADE DOURADA</h2>
+      <p class="enigma__text">
+        Memorize a sequência que a grade revela. Repita-a para decifrar o próximo símbolo.
+      </p>
+      <div class="gridpad" id="gridpad">
+        <button class="pad" data-i="0" aria-label="célula 1"></button>
+        <button class="pad" data-i="1" aria-label="célula 2"></button>
+        <button class="pad" data-i="2" aria-label="célula 3"></button>
+        <button class="pad" data-i="3" aria-label="célula 4"></button>
+        <button class="pad" data-i="4" aria-label="célula 5"></button>
+        <button class="pad" data-i="5" aria-label="célula 6"></button>
+        <button class="pad" data-i="6" aria-label="célula 7"></button>
+        <button class="pad" data-i="7" aria-label="célula 8"></button>
+        <button class="pad" data-i="8" aria-label="célula 9"></button>
+      </div>
+      <div class="enigma__actions">
+        <button class="btn btn--primary" id="showSeqBtn" type="button">Revelar sequência</button>
+        <button class="btn btn--ghost" id="resetSeqBtn" type="button">Reiniciar</button>
+      </div>
+      <div class="clue" id="clue2" hidden>
+        <p class="clue__label">PRÓXIMA PISTA</p>
+        <p class="clue__text">
+          “Onde a grade se cruza, o azul se torna porta. Três passos à esquerda do sol.”
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="enigma enigma--3" id="enigma3" hidden>
+    <div class="enigma__card">
+      <h2 class="enigma__title">ENIGMA 03 · O GLOBO GIRA</h2>
+      <p class="enigma__text">
+        Alinhe o globo ao ponto de chegada. Arraste o controle até o ângulo revelado.
+      </p>
+      <div class="rotor" id="rotor">
+        <div class="rotor__ring">
+          <span class="rotor__marker" id="rotorMarker"></span>
+        </div>
+        <div class="rotor__value" id="rotorValue">0°</div>
+      </div>
+      <input type="range" id="rotorSlider" min="0" max="360" value="0" class="rotor__slider" aria-label="Ângulo do globo">
+      <p id="rotorStatus" style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">Arraste até 210°</p>
+      <div class="enigma__actions">
+        <button class="btn btn--primary" id="checkAngleBtn" type="button">Confirmar</button>
+      </div>
+      <div class="clue" id="clue3" hidden>
+        <p class="clue__label">PRÓXIMA PISTA</p>
+        <p class="clue__text">
+          “A última chave não está no código, mas no silêncio entre duas notas.”
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="finale" id="finale" hidden>
+    <div class="finale__card">
+      <h2 class="finale__title">VOCÊ CHEGOU</h2>
+      <p class="finale__text">
+        A viagem do espaço ao Japão se completa. O universo de ORIENTAL se abre diante de você.
+      </p>
+      <div class="finale__row">
+        <img src="assets/fundo.jpg" alt="Arte do álbum ORIENTAL" class="finale__art">
+        <a class="spotify-btn" href="https://open.spotify.com/intl-pt/artist/6bsYNLyX6PJKvoq5VmOnpu?si=7QDjqxLVSqSLXV9OO1pkAQ" target="_blank" rel="noopener noreferrer" aria-label="Abrir perfil de Nego Marley no Spotify">
+          <span class="spotify-btn__icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.241 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.781-.18-.601.18-1.2.78-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.619.3z"/>
+            </svg>
+          </span>
+          <span class="spotify-btn__label">Ouvir no Spotify</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>ORIENTAL — NEGO MARLEY · Experiência artística</p>
+  </footer>
+</main>
+
+
+<!-- OMIKUJI MODAL -->
+<div class="omikuji" id="omikuji" hidden>
+  <div class="omikuji__backdrop" id="omikujiBackdrop"></div>
+  <div class="omikuji__card" role="dialog" aria-modal="true" aria-labelledby="omikujiTitle">
+    <p class="omikuji__label">OMIKUJI · BISCOITO DA SORTE</p>
+    <div class="cookie-wrap" id="cookieWrap">
+      <div class="cookie">
+        <div class="cookie__half cookie__half--left"></div>
+        <div class="cookie__half cookie__half--right"></div>
+        <div class="cookie__paper" id="cookiePaper">
+          <p class="cookie__msg" id="omikujiMsg"></p>
+        </div>
+      </div>
+    </div>
+    <h3 class="omikuji__title" id="omikujiTitle">Quebre o biscoito</h3>
+    <div class="omikuji__actions">
+      <button class="btn btn--primary" id="omikujiBreak" type="button">Quebrar biscoito</button>
+      <button class="btn btn--ghost" id="omikujiAgain" type="button">Outro biscoito</button>
+      <button class="btn btn--ghost" id="omikujiClose" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
