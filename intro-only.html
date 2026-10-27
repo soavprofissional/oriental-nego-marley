@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intro — ORIENTAL</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .intro__planet-wrap,.planet,.intro__logo{animation:none !important;transition:none !important}
+</style>
+</head>
+<body>
+<div id="intro" class="intro" aria-hidden="false">
+  <canvas id="stars" class="intro__stars"></canvas>
+  <div class="galaxy" aria-hidden="true">
+    <div class="nebula nebula--a"></div>
+    <div class="nebula nebula--b"></div>
+    <div class="nebula nebula--c"></div>
+    <div class="milkyway"></div>
+  </div>
+  <div class="static-planets" aria-hidden="true">
+    <span class="sp sp--1"></span>
+    <span class="sp sp--2"></span>
+    <span class="sp sp--3"></span>
+    <span class="sp sp--4"></span>
+    <span class="sp sp--5"></span>
+  </div>
+  <div class="comets" aria-hidden="true">
+    <span class="comet comet--1"></span>
+    <span class="comet comet--2"></span>
+    <span class="comet comet--3"></span>
+  </div>
+
+  <div class="intro__planet-wrap" id="planetWrap">
+    <img class="planet" id="planet" src="assets/intro.png" alt="Globo">
+  </div>
+
+  <div class="intro__ui">
+    <img class="intro__logo" src="assets/logo.png" alt="ORIENTAL">
+  </div>
+
+  <div class="intro__city" id="city">
+    <div class="city__sky"></div>
+    <div class="city__lights"></div>
+    <div class="city__glow city__glow--red"></div>
+    <div class="city__glow city__glow--blue"></div>
+  </div>
+
+  <div class="intro__vignette"></div>
+
+  <button class="intro__skip" id="skipIntro" type="button">Pular introdução</button>
+  <button class="intro__sound" id="soundToggle" type="button" aria-pressed="false">Som: desligado</button>
+</div>
+
+
+</body>
+</html>

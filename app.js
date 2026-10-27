@@ -4,7 +4,6 @@
   const planetWrap = document.getElementById('planetWrap');
   const city = document.getElementById('city');
   const subtitle = document.getElementById('introSubtitle');
-  const skipBtn = document.getElementById('skipIntro');
   const soundBtn = document.getElementById('soundToggle');
   const starsCanvas = document.getElementById('stars');
 
@@ -19,7 +18,7 @@
     starsCanvas.style.width = window.innerWidth + 'px';
     starsCanvas.style.height = window.innerHeight + 'px';
     ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    const n = Math.min(80, Math.floor(window.innerWidth*window.innerHeight/12000));
+    const n = Math.min(180, Math.floor(window.innerWidth*window.innerHeight/6000));
     stars = Array.from({length:n}, () => ({
       x: Math.random()*window.innerWidth,
       y: Math.random()*window.innerHeight,
@@ -49,26 +48,18 @@
   }
   drawStars();
 
-  // ---------- Sound (optional drone) ----------
-  let audioCtx = null, drone = null, soundOn = false;
+  // ---------- Sound (music loop) ----------
+  const bgMusic = document.getElementById('bgMusic');
+  let soundOn = false;
   function toggleSound(){
-    if(!audioCtx){
-      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ audioCtx = null; }
-    }
-    if(!audioCtx) return;
+    if(!bgMusic) return;
     if(!soundOn){
-      drone = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      drone.type = 'sine';
-      drone.frequency.value = 55;
-      gain.gain.value = 0.04;
-      drone.connect(gain).connect(audioCtx.destination);
-      drone.start();
+      bgMusic.play().catch(()=>{});
       soundOn = true;
       soundBtn.textContent = 'Som: ligado';
       soundBtn.setAttribute('aria-pressed','true');
     } else {
-      if(drone){ try{ drone.stop(); }catch(e){} drone=null; }
+      bgMusic.pause();
       soundOn = false;
       soundBtn.textContent = 'Som: desligado';
       soundBtn.setAttribute('aria-pressed','false');
@@ -109,11 +100,12 @@
     setTimeout(finishIntro, 3600);
   }
 
-  skipBtn.addEventListener('click', finishIntro);
+  const enterBtn = document.getElementById('enterBtn');
+  console.log('enterBtn found:', !!enterBtn);
+  if(enterBtn) enterBtn.addEventListener('click', () => { console.log('clicked'); finishIntro(); });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && !introDone) finishIntro(); });
 
-  // start intro after a tick
-  setTimeout(runIntro, 300);
+  // intro stays static until user clicks 'Ir para Oriental' or 'Pular'
 
   // ---------- Origami transform ----------
   const transformBtn = document.getElementById('transformBtn');
@@ -202,6 +194,7 @@
 
   transformBtn.addEventListener('click', transform);
   resetBtn.addEventListener('click', reset);
+  window.finishIntro = finishIntro;
 })();
 
 // ---------- Progress ----------
@@ -287,7 +280,7 @@ const rotorValue = document.getElementById('rotorValue');
 const rotorSlider = document.getElementById('rotorSlider');
 const checkAngleBtn = document.getElementById('checkAngleBtn');
 const clue3 = document.getElementById('clue3');
-const targetAngle = 210;
+const targetAngle = 360;
 
 function revealFinal(){
   const finale = document.getElementById('finale');
