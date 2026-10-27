@@ -11,20 +11,32 @@
 <!-- INTRO CINEMATOGRÁFICA -->
 <div id="intro" class="intro" aria-hidden="false">
   <canvas id="stars" class="intro__stars"></canvas>
-  <div class="intro__nebula intro__nebula--a"></div>
-  <div class="intro__nebula intro__nebula--b"></div>
+  <div class="galaxy" aria-hidden="true">
+    <div class="nebula nebula--a"></div>
+    <div class="nebula nebula--b"></div>
+    <div class="nebula nebula--c"></div>
+    <div class="milkyway"></div>
+  </div>
+  <div class="static-planets" aria-hidden="true">
+    <span class="sp sp--1"></span>
+    <span class="sp sp--2"></span>
+    <span class="sp sp--3"></span>
+    <span class="sp sp--4"></span>
+    <span class="sp sp--5"></span>
+  </div>
+  <div class="comets" aria-hidden="true">
+    <span class="comet comet--1"></span>
+    <span class="comet comet--2"></span>
+    <span class="comet comet--3"></span>
+  </div>
 
   <div class="intro__planet-wrap" id="planetWrap">
-    <div class="solar" aria-hidden="true">
-      <div class="orbit orbit--1"><span class="satellite"></span></div>
-      <div class="orbit orbit--2"><span class="satellite satellite--gold"></span></div>
-      <div class="orbit orbit--3"><span class="satellite"></span></div>
-    </div>
-    <div class="planet" id="planet">
-      <div class="planet__base"></div>
-      <div class="planet__glow"></div>
-      <div class="planet__shadow"></div>
-    </div>
+    <img class="planet" id="planet" src="assets/intro.png" alt="Globo">
+  </div>
+
+  <div class="intro__ui">
+    <img class="intro__logo" src="assets/logo.png" alt="ORIENTAL">
+    <button class="intro__enter" id="enterBtn" type="button">Ir para Oriental</button>
   </div>
 
   <div class="intro__city" id="city">
@@ -36,13 +48,6 @@
 
   <div class="intro__vignette"></div>
 
-  <div class="intro__ui">
-    <p class="intro__kicker">ORIENTAL</p>
-    <h1 class="intro__title">NEGOMARLEY</h1>
-    <p class="intro__subtitle" id="introSubtitle">Uma viagem do espaço ao Japão</p>
-  </div>
-
-  <button class="intro__skip" id="skipIntro" type="button">Pular introdução</button>
   <button class="intro__sound" id="soundToggle" type="button" aria-pressed="false">Som: desligado</button>
 </div>
 
@@ -59,7 +64,7 @@
     </button>
     <p class="hero__hint">Clique no pingente para abrir seu biscoito da sorte japonês</p>
     <p class="hero__kicker">ÁLBUM CONCEITUAL</p>
-    <h1 class="hero__title">ORIENTAL</h1>
+    <img class="hero__logo" src="assets/logo.png" alt="ORIENTAL">
     <p class="hero__artist">NEGOMARLEY</p>
     <p class="hero__tag">Experiência artística interativa</p>
   </section>
@@ -73,12 +78,10 @@
 
       <div class="stage" id="stage">
         <div class="stage__origami" id="origami" aria-label="Origami">
-          <svg viewBox="0 0 200 200" class="origami__svg" aria-hidden="true">
-            <polygon points="100,20 180,100 100,180 20,100" fill="none" stroke="rgba(212,175,55,0.9)" stroke-width="1.5"/>
-            <polygon points="100,20 140,100 100,180 60,100" fill="rgba(212,175,55,0.08)" stroke="rgba(212,175,55,0.6)" stroke-width="1"/>
-            <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(212,175,55,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
-            <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(212,175,55,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
-          </svg>
+          <div class="paper">
+            <div class="paper__sheet"></div>
+            <div class="paper__fold"></div>
+          </div>
           <span class="origami__label">ORIGAMI</span>
         </div>
 
@@ -220,6 +223,15 @@
   </div>
 </div>
 
+<audio id="bgMusic" src="assets/musica.wav" loop preload="auto"></audio>
 <script src="app.js"></script>
+<script>
+document.getElementById('enterBtn').addEventListener('click', function(){
+  document.getElementById('intro').style.display='none';
+  var m=document.getElementById('main');
+  m.removeAttribute('hidden');
+  m.classList.add('is-visible');
+});
+</script>
 </body>
 </html>
