@@ -55,10 +55,11 @@
   function toggleSound(){
     if(!bgMusic) return;
     if(!soundOn){
-      bgMusic.play().catch(()=>{});
+      bgMusic.play().then(()=>{}).catch((e)=>{});
       soundOn = true;
       soundBtn.textContent = 'Som: ligado';
       soundBtn.setAttribute('aria-pressed','true');
+      if(mainSoundBtn) mainSoundBtn.textContent = 'Som: ligado';
     } else {
       bgMusic.pause();
       soundOn = false;
@@ -98,7 +99,7 @@
     requestAnimationFrame(() => main.classList.add('is-visible'));
     // cleanup after transition
     setTimeout(() => { intro.setAttribute('aria-hidden','true'); }, 1000);
-    if(soundOn && drone){ try{ drone.stop(); }catch(e){} drone=null; soundOn=false; soundBtn.textContent='Som: desligado'; }
+    if(soundOn){ try{ bgMusic.pause(); }catch(e){} soundOn=false; soundBtn.textContent='Som: desligado'; }
   }
 
   function runIntro(){
@@ -139,9 +140,25 @@ const quizScore = document.getElementById('quizScore');
 const quizResultMsg = document.getElementById('quizResultMsg');
 const quizProgressBar = document.getElementById('quizProgressBar');
 const quizProgressLabel = document.getElementById('quizProgressLabel');
+const quizScoreLive = document.getElementById('quizScoreLive');
 const quizVideoWrap = document.getElementById('quizVideoWrap');
-const quizVideo = document.getElementById('quizVideo');
+const quizReward = document.getElementById('quizReward');
+const quizFail = document.getElementById('quizFail');
+const quizAudio = document.getElementById('quizAudio');
 const quizPlayBtn = document.getElementById('quizPlayBtn');
+const quizPauseBtn = document.getElementById('quizPauseBtn');
+const quizVolume = document.getElementById('quizVolume');
+const quizPlayerStatus = document.getElementById('quizPlayerStatus');
+
+const guideCard = document.getElementById('guideCard');
+const guidePlayBtn = document.getElementById('guidePlayBtn');
+const guideStatus = document.getElementById('guideStatus');
+const guidePlayer = document.getElementById('guidePlayer');
+const guideAudio = document.getElementById('guideAudio');
+const guidePlay = document.getElementById('guidePlay');
+const guidePause = document.getElementById('guidePause');
+const guideVolume = document.getElementById('guideVolume');
+const guidePlayerStatus = document.getElementById('guidePlayerStatus');
 
 let qIndex = 0;
 let qScore = 0;
@@ -153,6 +170,7 @@ function updateProgress(){
   const pct = (qIndex / total) * 100;
   if(quizProgressBar) quizProgressBar.style.width = pct + '%';
   if(quizProgressLabel) quizProgressLabel.textContent = `Pergunta ${Math.min(qIndex+1,total)} de ${total}`;
+  if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${qIndex - qScore}`;
 }
 
 function renderQuestion(){
@@ -169,6 +187,7 @@ function renderQuestion(){
       btn.addEventListener('click', () => selectAnswer(i, btn));
       quizOptions.appendChild(btn);
     });
+  } else {
   }
   if(quizFeedback){ quizFeedback.hidden = true; quizFeedback.className='quiz__feedback'; }
   if(quizNext) quizNext.hidden = true;
@@ -178,10 +197,23 @@ function renderQuestion(){
 function selectAnswer(i, btn){
   if(qAnswered) return;
   qAnswered = true;
-  // quiz livre para testes: sem acerto/erro, apenas avança
-  [...quizOptions.children].forEach((b) => { b.disabled = true; });
-  if(quizFeedback){ quizFeedback.hidden = true; }
+  const q = QUIZ_DATA[qIndex];
+  const correct = i === q.respostaCorreta;
+  if(correct){ qScore++; }
+  // mark buttons
+  [...quizOptions.children].forEach((b, idx) => {
+    b.disabled = true;
+    if(idx === q.respostaCorreta) b.classList.add('is-correct');
+    if(idx === i && !correct) b.classList.add('is-wrong');
+  });
+  if(quizFeedback){
+    quizFeedback.hidden = false;
+    quizFeedback.textContent = correct ? 'Correto!' : 'Errado. A resposta correta foi destacada.';
+    quizFeedback.className = 'quiz__feedback ' + (correct ? 'is-correct' : 'is-wrong');
+  }
   if(quizNext) quizNext.hidden = true;
+  if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${qIndex + 1 - qScore}`;
+  // auto-advance to next question
   if(qTimer) clearTimeout(qTimer);
   qTimer = setTimeout(() => {
     qIndex++;
@@ -192,7 +224,7 @@ function selectAnswer(i, btn){
     } else {
       renderQuestion();
     }
-  }, 800);
+  }, 1500);
 }
 
 function showResult(){
@@ -204,36 +236,44 @@ function showResult(){
   if(quizResult){ quizResult.hidden = false; }
   const total = QUIZ_DATA.length;
   const pct = qScore / total;
-  if(quizScore) quizScore.textContent = `${qScore} / ${total} (${Math.round(pct*100)}%)`;
-  const unlocked = true; // modo teste livre
-  if(unlocked){
-    localStorage.setItem(UNLOCK_KEY, 'true');
-    if(quizResultMsg) quizResultMsg.textContent = 'Guia exclusiva desbloqueada! Assista ao vídeo abaixo.';
-    if(quizVideoWrap) quizVideoWrap.hidden = false;
-    console.log('showResult unlocked, videoWrap hidden:', quizVideoWrap?.hidden);
-    if(quizVideo){
-      console.log('video src:', quizVideo.currentSrc || quizVideo.src);
-      quizVideo.load();
-      const tryPlay = () => { console.log('trying play'); quizVideo.play().then(()=>console.log('play ok')).catch(e=>console.log('play err',e)); };
-      quizVideo.addEventListener('canplay', tryPlay, {once:true});
-      quizVideo.addEventListener('loadeddata', tryPlay, {once:true});
-      setTimeout(tryPlay, 100);
-      setTimeout(tryPlay, 500);
-      setTimeout(tryPlay, 1000);
-    }
-    if(quizPlayBtn){
-      quizPlayBtn.hidden = false;
-      quizPlayBtn.addEventListener('click', () => {
-        if(quizVideo){ quizVideo.play().catch(()=>{}); }
-      });
-    }
+  if(quizScore) quizScore.textContent = `${qScore} / ${total}`;
+  if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${total - qScore}`;
+  if(qScore === total){
+    if(quizReward) quizReward.hidden = false;
+    if(quizFail) quizFail.hidden = true;
+    if(quizResultMsg) quizResultMsg.textContent = '';
+    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
+    if(quizPlayerStatus) quizPlayerStatus.textContent = 'Pronto';
+    // desbloquear guide card
+    unlockGuide();
   } else {
-    if(quizResultMsg) quizResultMsg.textContent = 'Você não atingiu o mínimo. Tente novamente para desbloquear o vídeo.';
+    if(quizReward) quizReward.hidden = true;
+    if(quizFail) quizFail.hidden = false;
+    if(quizResultMsg) quizResultMsg.textContent = 'Você não acertou todas as 15 perguntas. É necessário acertar todas para desbloquear a prévia exclusiva.';
     if(quizRestart) quizRestart.hidden = false;
-    if(quizVideoWrap) quizVideoWrap.hidden = true;
+    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
+    lockGuide();
   }
 }
 
+if(quizRestart){
+  quizRestart.addEventListener('click', () => {
+    if(qTimer) clearTimeout(qTimer);
+    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
+    if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
+    qIndex = 0; qScore = 0; qAnswered = false;
+    if(quizResult) quizResult.hidden = true;
+    if(quizReward) quizReward.hidden = true;
+    if(quizFail) quizFail.hidden = true;
+    if(quizQuestion) quizQuestion.parentElement.style.display = '';
+    if(quizOptions) quizOptions.style.display = '';
+    if(quizRestart) quizRestart.hidden = true;
+    if(quizVideoWrap) quizVideoWrap.hidden = true;
+    if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
+    lockGuide();
+    renderQuestion();
+  });
+}
 if(quizNext){
   quizNext.addEventListener('click', () => {
     qIndex++;
@@ -243,17 +283,120 @@ if(quizNext){
     renderQuestion();
   });
 }
+function unlockGuide(){
+  if(guidePlayBtn){ guidePlayBtn.disabled = false; guidePlayBtn.removeAttribute('aria-disabled'); }
+  if(guideStatus) guideStatus.textContent = 'Desbloqueado — toque para ouvir.';
+  if(guidePlayer) guidePlayer.hidden = false;
+}
+function lockGuide(){
+  if(guidePlayBtn){ guidePlayBtn.disabled = true; guidePlayBtn.setAttribute('aria-disabled','true'); }
+  if(guideStatus) guideStatus.textContent = 'Bloqueado — acerte todas as perguntas.';
+  if(guidePlayer) guidePlayer.hidden = true;
+  if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
+  if(guidePlay) guidePlay.hidden = false;
+  if(guidePause) guidePause.hidden = true;
+  if(guidePlayerStatus) guidePlayerStatus.textContent = 'Pronto';
+}
+
+// guide card player
+if(guidePlay){
+  guidePlay.addEventListener('click', () => {
+    if(guideAudio){
+      if(bgMusic && !bgMusic.paused){ bgMusic.pause(); soundOn = false; if(soundBtn) soundBtn.textContent = 'Som: desligado'; if(soundBtn) soundBtn.setAttribute('aria-pressed','false'); if(mainSoundBtn) mainSoundBtn.textContent = 'Som: desligado'; }
+      guideAudio.play().catch(()=>{});
+      if(guidePlay) guidePlay.hidden = true;
+      if(guidePause) guidePause.hidden = false;
+      if(guidePlayerStatus) guidePlayerStatus.textContent = 'Tocando';
+    }
+  });
+}
+if(guidePause){
+  guidePause.addEventListener('click', () => {
+    if(guideAudio){
+      guideAudio.pause();
+      if(guidePlay) guidePlay.hidden = false;
+      if(guidePause) guidePause.hidden = true;
+      if(guidePlayerStatus) guidePlayerStatus.textContent = 'Pausado';
+    }
+  });
+}
+if(guideVolume){
+  guideVolume.addEventListener('input', () => {
+    if(guideAudio) guideAudio.volume = parseFloat(guideVolume.value);
+  });
+}
+if(guideAudio){
+  guideAudio.addEventListener('ended', () => {
+    if(guidePlay) guidePlay.hidden = false;
+    if(guidePause) guidePause.hidden = true;
+    if(guidePlayerStatus) guidePlayerStatus.textContent = 'Concluído';
+  });
+}
+if(guidePlayBtn){
+  guidePlayBtn.addEventListener('click', () => {
+    if(!guidePlayBtn.disabled){
+      if(guidePlayer) guidePlayer.hidden = false;
+      if(guideAudio){ guideAudio.play().catch(()=>{}); }
+      if(guidePlay) guidePlay.hidden = true;
+      if(guidePause) guidePause.hidden = false;
+      if(guidePlayerStatus) guidePlayerStatus.textContent = 'Tocando';
+    }
+  });
+}
+
+// init locked
+lockGuide();
+
 if(quizRestart){
   quizRestart.addEventListener('click', () => {
     if(qTimer) clearTimeout(qTimer);
+    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
+    if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
     qIndex = 0; qScore = 0; qAnswered = false;
     if(quizResult) quizResult.hidden = true;
+    if(quizReward) quizReward.hidden = true;
+    if(quizFail) quizFail.hidden = true;
     if(quizQuestion) quizQuestion.parentElement.style.display = '';
     if(quizOptions) quizOptions.style.display = '';
     if(quizRestart) quizRestart.hidden = true;
     if(quizVideoWrap) quizVideoWrap.hidden = true;
-    if(quizPlayBtn) quizPlayBtn.hidden = true;
+    if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
+    lockGuide();
     renderQuestion();
+  });
+}
+
+if(quizPlayBtn){
+  quizPlayBtn.addEventListener('click', () => {
+    if(quizAudio){
+      if(bgMusic && !bgMusic.paused){ bgMusic.pause(); soundOn = false; if(soundBtn) soundBtn.textContent = 'Som: desligado'; if(soundBtn) soundBtn.setAttribute('aria-pressed','false'); if(mainSoundBtn) mainSoundBtn.textContent = 'Som: desligado'; }
+      quizAudio.play().catch(()=>{});
+      if(quizPlayBtn) quizPlayBtn.hidden = true;
+      if(quizPauseBtn) quizPauseBtn.hidden = false;
+      if(quizPlayerStatus) quizPlayerStatus.textContent = 'Tocando';
+    }
+  });
+}
+if(quizPauseBtn){
+  quizPauseBtn.addEventListener('click', () => {
+    if(quizAudio){
+      quizAudio.pause();
+      if(quizPlayBtn) quizPlayBtn.hidden = false;
+      if(quizPauseBtn) quizPauseBtn.hidden = true;
+      if(quizPlayerStatus) quizPlayerStatus.textContent = 'Pausado';
+    }
+  });
+}
+if(quizVolume){
+  quizVolume.addEventListener('input', () => {
+    if(quizAudio) quizAudio.volume = parseFloat(quizVolume.value);
+  });
+}
+if(quizAudio){
+  quizAudio.addEventListener('ended', () => {
+    if(quizPlayBtn) quizPlayBtn.hidden = false;
+    if(quizPauseBtn) quizPauseBtn.hidden = true;
+    if(quizPlayerStatus) quizPlayerStatus.textContent = 'Concluído';
   });
 }
 
@@ -316,59 +459,6 @@ if(omikujiBackdrop) omikujiBackdrop.addEventListener('click', closeOmikuji);
 if(omikujiBreak) omikujiBreak.addEventListener('click', breakCookie);
 if(omikujiAgain) omikujiAgain.addEventListener('click', () => { resetCookie(); setTimeout(breakCookie, 100); });
 
-
-  // ---------- Gallery 999 ----------
-  const gallery999Cover = document.getElementById('gallery999Cover');
-  const lightbox999 = document.getElementById('lightbox999');
-  const lightbox999Backdrop = document.getElementById('lightbox999Backdrop');
-  const lightbox999Close = document.getElementById('lightbox999Close');
-  const lightbox999Grid = document.getElementById('lightbox999Grid');
-
-  const gallery999Images = [
-    'assets/999/IMG_4610.jpg',
-    'assets/999/IMG_6433.jpg',
-    'assets/999/IMG_7312.jpg',
-    'assets/999/IMG_7325.jpg',
-    'assets/999/IMG_7564.jpg',
-    'assets/999/IMG_8071.jpg',
-    'assets/999/IMG_8465.jpg',
-    'assets/999/IMG_8952.jpg',
-    'assets/999/IMG_9012.JPEG'
-  ];
-
-  const imgviewer999 = document.getElementById('imgviewer999');
-  const imgviewer999Backdrop = document.getElementById('imgviewer999Backdrop');
-  const imgviewer999Img = document.getElementById('imgviewer999Img');
-  const imgviewer999Close = document.getElementById('imgviewer999Close');
-
-  function openImageViewer(src){
-    if(!imgviewer999 || !imgviewer999Img) return;
-    imgviewer999Img.src = src;
-    imgviewer999.hidden = false;
-  }
-  function closeImageViewer(){ if(imgviewer999) imgviewer999.hidden = true; }
-
-  if(imgviewer999Backdrop) imgviewer999Backdrop.addEventListener('click', closeImageViewer);
-  if(imgviewer999Close) imgviewer999Close.addEventListener('click', closeImageViewer);
-
-  function openLightbox999(){
-    if(!lightbox999 || !lightbox999Grid) return;
-    lightbox999Grid.innerHTML = '';
-    gallery999Images.forEach(src => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = '999';
-      img.addEventListener('click', () => openImageViewer(src));
-      lightbox999Grid.appendChild(img);
-    });
-    lightbox999.hidden = false;
-  }
-  function closeLightbox999(){ if(lightbox999) lightbox999.hidden = true; }
-
-  console.log('gallery999Cover:', !!gallery999Cover, 'lightbox999:', !!lightbox999);
-  if(gallery999Cover) gallery999Cover.addEventListener('click', () => { console.log('999 cover clicked'); openLightbox999(); });
-  if(lightbox999Backdrop) lightbox999Backdrop.addEventListener('click', closeLightbox999);
-  if(lightbox999Close) lightbox999Close.addEventListener('click', closeLightbox999);
 
   window.finishIntro = finishIntro;
 })();
