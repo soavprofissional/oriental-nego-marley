@@ -159,7 +159,22 @@ img{max-width:100%;display:block}
 .hero__tag{margin-top:6px;font-size:13px;color:var(--blue-soft)}
 
 
-.footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:12px}
+/* ============ GALLERY 999 ============ */
+.gallery999{padding:24px 16px 120px;display:flex;justify-content:center}
+.gallery999__card{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;backdrop-filter:blur(10px)}
+.gallery999__title{font-size:28px;letter-spacing:.3em;color:var(--gold);margin-bottom:8px}
+.gallery999__intro{color:var(--muted);font-size:14px;margin-bottom:16px}
+.gallery999__cover{border:none;padding:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.gallery999__cover img{width:100%;border-radius:12px}
+.gallery999__cover:hover{transform:scale(1.02);box-shadow:0 0 24px rgba(212,175,55,.4)}
+
+.lightbox999{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.lightbox999__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.85);backdrop-filter:blur(6px)}
+.lightbox999__content{position:relative;width:min(96vw,900px);max-height:90vh;overflow:auto;background:rgba(12,16,34,.95);border:1px solid rgba(212,175,55,.4);border-radius:20px;padding:16px}
+.lightbox999__close{position:absolute;top:10px;right:14px;font-size:22px;color:var(--gold);background:none;border:none;cursor:pointer;z-index:2}
+.lightbox999__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:28px;justify-items:center}
+.lightbox999__grid img{width:100%;max-width:200px;border-radius:8px;cursor:pointer;transition:transform .2s;object-fit:cover;aspect-ratio:1}
+.lightbox999__grid img:hover{transform:scale(1.05)}
 
 /* Reduced motion */
 @media (max-width:600px){
@@ -542,3 +557,25 @@ img{max-width:100%;display:block}
 }
 
 .btn, .quiz__option, .intro__enter, .main__sound, .main__intro, .intro__sound { min-height: 44px; min-width: 44px; }
+
+/* ============ GALLERY 999 ============ */
+.gallery999{padding:24px 16px 120px;display:flex;justify-content:center}
+.gallery999__card{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;backdrop-filter:blur(10px)}
+.gallery999__title{font-size:28px;letter-spacing:.3em;color:var(--gold);margin-bottom:8px}
+.gallery999__intro{color:var(--muted);font-size:14px;margin-bottom:16px}
+.gallery999__cover{border:none;padding:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.gallery999__cover img{width:100%;border-radius:12px}
+.gallery999__cover:hover{transform:scale(1.02);box-shadow:0 0 24px rgba(212,175,55,.4)}
+
+.lightbox999{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.lightbox999__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.85);backdrop-filter:blur(6px)}
+.lightbox999__content{position:relative;width:min(96vw,900px);max-height:90vh;overflow:auto;background:rgba(12,16,34,.95);border:1px solid rgba(212,175,55,.4);border-radius:20px;padding:16px}
+.lightbox999__close{position:absolute;top:10px;right:14px;font-size:22px;color:var(--gold);background:none;border:none;cursor:pointer;z-index:2}
+.lightbox999__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:28px;justify-items:center}
+.lightbox999__grid img{width:100%;max-width:200px;border-radius:8px;cursor:pointer;transition:transform .2s;object-fit:cover;aspect-ratio:1}
+.lightbox999__grid img:hover{transform:scale(1.05)}
+
+.imgviewer999{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:20px}
+.imgviewer999__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.9)}
+.imgviewer999__img{max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:0 0 40px rgba(0,0,0,.6);position:relative;z-index:1}
+.imgviewer999__close{position:absolute;top:16px;right:20px;font-size:28px;color:#fff;background:none;border:none;cursor:pointer;z-index:2}

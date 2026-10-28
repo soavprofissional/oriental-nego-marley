@@ -141,6 +141,7 @@ const quizProgressBar = document.getElementById('quizProgressBar');
 const quizProgressLabel = document.getElementById('quizProgressLabel');
 const quizVideoWrap = document.getElementById('quizVideoWrap');
 const quizVideo = document.getElementById('quizVideo');
+const quizPlayBtn = document.getElementById('quizPlayBtn');
 
 let qIndex = 0;
 let qScore = 0;
@@ -177,22 +178,10 @@ function renderQuestion(){
 function selectAnswer(i, btn){
   if(qAnswered) return;
   qAnswered = true;
-  const q = QUIZ_DATA[qIndex];
-  const correct = i === q.respostaCorreta;
-  if(correct){ qScore++; }
-  // mark buttons
-  [...quizOptions.children].forEach((b, idx) => {
-    b.disabled = true;
-    if(idx === q.respostaCorreta) b.classList.add('is-correct');
-    if(idx === i && !correct) b.classList.add('is-wrong');
-  });
-  if(quizFeedback){
-    quizFeedback.hidden = false;
-    quizFeedback.textContent = correct ? 'Correto!' : 'Errado. A resposta correta foi destacada.';
-    quizFeedback.className = 'quiz__feedback ' + (correct ? 'is-correct' : 'is-wrong');
-  }
+  // quiz livre para testes: sem acerto/erro, apenas avança
+  [...quizOptions.children].forEach((b) => { b.disabled = true; });
+  if(quizFeedback){ quizFeedback.hidden = true; }
   if(quizNext) quizNext.hidden = true;
-  // auto-advance to next question
   if(qTimer) clearTimeout(qTimer);
   qTimer = setTimeout(() => {
     qIndex++;
@@ -203,7 +192,7 @@ function selectAnswer(i, btn){
     } else {
       renderQuestion();
     }
-  }, 1500);
+  }, 800);
 }
 
 function showResult(){
@@ -216,11 +205,28 @@ function showResult(){
   const total = QUIZ_DATA.length;
   const pct = qScore / total;
   if(quizScore) quizScore.textContent = `${qScore} / ${total} (${Math.round(pct*100)}%)`;
-  const unlocked = localStorage.getItem(UNLOCK_KEY) === 'true' || pct >= MIN_SCORE;
+  const unlocked = true; // modo teste livre
   if(unlocked){
     localStorage.setItem(UNLOCK_KEY, 'true');
-    if(quizResultMsg) quizResultMsg.textContent = 'Parabéns! Você desbloqueou o vídeo exclusivo.';
+    if(quizResultMsg) quizResultMsg.textContent = 'Guia exclusiva desbloqueada! Assista ao vídeo abaixo.';
     if(quizVideoWrap) quizVideoWrap.hidden = false;
+    console.log('showResult unlocked, videoWrap hidden:', quizVideoWrap?.hidden);
+    if(quizVideo){
+      console.log('video src:', quizVideo.currentSrc || quizVideo.src);
+      quizVideo.load();
+      const tryPlay = () => { console.log('trying play'); quizVideo.play().then(()=>console.log('play ok')).catch(e=>console.log('play err',e)); };
+      quizVideo.addEventListener('canplay', tryPlay, {once:true});
+      quizVideo.addEventListener('loadeddata', tryPlay, {once:true});
+      setTimeout(tryPlay, 100);
+      setTimeout(tryPlay, 500);
+      setTimeout(tryPlay, 1000);
+    }
+    if(quizPlayBtn){
+      quizPlayBtn.hidden = false;
+      quizPlayBtn.addEventListener('click', () => {
+        if(quizVideo){ quizVideo.play().catch(()=>{}); }
+      });
+    }
   } else {
     if(quizResultMsg) quizResultMsg.textContent = 'Você não atingiu o mínimo. Tente novamente para desbloquear o vídeo.';
     if(quizRestart) quizRestart.hidden = false;
@@ -246,6 +252,7 @@ if(quizRestart){
     if(quizOptions) quizOptions.style.display = '';
     if(quizRestart) quizRestart.hidden = true;
     if(quizVideoWrap) quizVideoWrap.hidden = true;
+    if(quizPlayBtn) quizPlayBtn.hidden = true;
     renderQuestion();
   });
 }
@@ -309,6 +316,59 @@ if(omikujiBackdrop) omikujiBackdrop.addEventListener('click', closeOmikuji);
 if(omikujiBreak) omikujiBreak.addEventListener('click', breakCookie);
 if(omikujiAgain) omikujiAgain.addEventListener('click', () => { resetCookie(); setTimeout(breakCookie, 100); });
 
+
+  // ---------- Gallery 999 ----------
+  const gallery999Cover = document.getElementById('gallery999Cover');
+  const lightbox999 = document.getElementById('lightbox999');
+  const lightbox999Backdrop = document.getElementById('lightbox999Backdrop');
+  const lightbox999Close = document.getElementById('lightbox999Close');
+  const lightbox999Grid = document.getElementById('lightbox999Grid');
+
+  const gallery999Images = [
+    'assets/999/IMG_4610.jpg',
+    'assets/999/IMG_6433.jpg',
+    'assets/999/IMG_7312.jpg',
+    'assets/999/IMG_7325.jpg',
+    'assets/999/IMG_7564.jpg',
+    'assets/999/IMG_8071.jpg',
+    'assets/999/IMG_8465.jpg',
+    'assets/999/IMG_8952.jpg',
+    'assets/999/IMG_9012.JPEG'
+  ];
+
+  const imgviewer999 = document.getElementById('imgviewer999');
+  const imgviewer999Backdrop = document.getElementById('imgviewer999Backdrop');
+  const imgviewer999Img = document.getElementById('imgviewer999Img');
+  const imgviewer999Close = document.getElementById('imgviewer999Close');
+
+  function openImageViewer(src){
+    if(!imgviewer999 || !imgviewer999Img) return;
+    imgviewer999Img.src = src;
+    imgviewer999.hidden = false;
+  }
+  function closeImageViewer(){ if(imgviewer999) imgviewer999.hidden = true; }
+
+  if(imgviewer999Backdrop) imgviewer999Backdrop.addEventListener('click', closeImageViewer);
+  if(imgviewer999Close) imgviewer999Close.addEventListener('click', closeImageViewer);
+
+  function openLightbox999(){
+    if(!lightbox999 || !lightbox999Grid) return;
+    lightbox999Grid.innerHTML = '';
+    gallery999Images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '999';
+      img.addEventListener('click', () => openImageViewer(src));
+      lightbox999Grid.appendChild(img);
+    });
+    lightbox999.hidden = false;
+  }
+  function closeLightbox999(){ if(lightbox999) lightbox999.hidden = true; }
+
+  console.log('gallery999Cover:', !!gallery999Cover, 'lightbox999:', !!lightbox999);
+  if(gallery999Cover) gallery999Cover.addEventListener('click', () => { console.log('999 cover clicked'); openLightbox999(); });
+  if(lightbox999Backdrop) lightbox999Backdrop.addEventListener('click', closeLightbox999);
+  if(lightbox999Close) lightbox999Close.addEventListener('click', closeLightbox999);
 
   window.finishIntro = finishIntro;
 })();
