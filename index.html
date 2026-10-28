@@ -107,16 +107,39 @@
         <div class="quiz__video" id="quizVideoWrap" hidden>
           <h4 class="quiz__video-title">Vídeo exclusivo</h4>
           <p class="quiz__video-desc">Música inédita de ORIENTAL — NEGO MARLEY.</p>
-          <video id="quizVideo" controls controlsList="nodownload" preload="none" playsinline style="width:100%;border-radius:12px;">
-            <source src="public/videos/video.mp4" type="video/mp4">
+          <video id="quizVideo" controls controlsList="nodownload" preload="metadata" playsinline muted style="width:100%;border-radius:12px;">
+            <source src="assets/quiz-final.mp4" type="video/mp4">
             Seu navegador não suporta vídeo.
           </video>
+          <button class="btn btn--primary" id="quizPlayBtn" type="button" style="margin-top:10px;">Reproduzir guia exclusiva</button>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="footer">
+  <section class="gallery999" id="gallery999">
+    <div class="gallery999__card">
+      <h2 class="gallery999__title">999</h2>
+      <p class="gallery999__intro">Toque para ver todas as imagens.</p>
+      <button class="gallery999__cover" id="gallery999Cover" type="button">
+        <img src="assets/999/IMG_4610.jpg" alt="999 capa">
+      </button>
+    </div>
+  </section>
+
+  <div class="lightbox999" id="lightbox999" hidden>
+    <div class="lightbox999__backdrop" id="lightbox999Backdrop"></div>
+    <div class="lightbox999__content">
+      <button class="lightbox999__close" id="lightbox999Close" type="button">✕</button>
+      <div class="lightbox999__grid" id="lightbox999Grid"></div>
+    </div>
+  </div>
+
+  <div class="imgviewer999" id="imgviewer999" hidden>
+    <div class="imgviewer999__backdrop" id="imgviewer999Backdrop"></div>
+    <img class="imgviewer999__img" id="imgviewer999Img" alt="999">
+    <button class="imgviewer999__close" id="imgviewer999Close" type="button">✕</button>
+  </div>
     <p>ORIENTAL — NEGO MARLEY · Experiência artística</p>
   </footer>
 </main>
