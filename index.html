@@ -83,12 +83,13 @@
   <section class="quiz" id="quiz">
     <div class="quiz__card">
       <h2 class="quiz__title"><span class="quiz__word">QUIZ</span><img src="assets/logo.png" alt="ORIENTAL" class="quiz__logo"></h2>
-      <p class="quiz__intro">Responda as perguntas e desbloqueie o vídeo exclusivo.</p>
+      <p class="quiz__intro">Responda as perguntas e desbloqueie a guia exclusiva.</p>
 
       <div class="quiz__progress">
         <div class="quiz__progress-bar" id="quizProgressBar"></div>
       </div>
-      <p class="quiz__progress-label" id="quizProgressLabel">Pergunta 1 de 3</p>
+      <p class="quiz__progress-label" id="quizProgressLabel">Pergunta 1 de 15</p>
+      <p class="quiz__score-live" id="quizScoreLive">Acertos: 0 | Erros: 0</p>
 
       <div class="quiz__question" id="quizQuestion"></div>
       <div class="quiz__options" id="quizOptions"></div>
@@ -101,45 +102,49 @@
       </div>
 
       <div class="quiz__result" id="quizResult" hidden>
-        <h3 class="quiz__result-title">Resultado</h3>
-        <p class="quiz__score" id="quizScore"></p>
-        <p class="quiz__result-msg" id="quizResultMsg"></p>
-        <div class="quiz__video" id="quizVideoWrap" hidden>
-          <h4 class="quiz__video-title">Vídeo exclusivo</h4>
-          <p class="quiz__video-desc">Música inédita de ORIENTAL — NEGO MARLEY.</p>
-          <video id="quizVideo" controls controlsList="nodownload" preload="metadata" playsinline muted style="width:100%;border-radius:12px;">
-            <source src="assets/quiz-final.mp4" type="video/mp4">
-            Seu navegador não suporta vídeo.
-          </video>
-          <button class="btn btn--primary" id="quizPlayBtn" type="button" style="margin-top:10px;">Reproduzir guia exclusiva</button>
+        <div class="quiz__reward" id="quizReward" hidden>
+          <h3 class="quiz__reward-title">VOCÊ CHEGOU À PRÉVIA EXCLUSIVA</h3>
+          <p class="quiz__reward-text">“Você concluiu o desafio ORIENTAL e desbloqueou sua recompensa exclusiva.”</p>
+          <div class="quiz__player">
+            <audio id="quizAudio" src="assets/amarelice.mp3" preload="metadata"></audio>
+            <div class="quiz__player-controls">
+              <button class="btn btn--primary" id="quizPlayBtn" type="button">▶ Reproduzir</button>
+              <button class="btn btn--ghost" id="quizPauseBtn" type="button" hidden>⏸ Pausar</button>
+              <span class="quiz__player-status" id="quizPlayerStatus">Pronto</span>
+            </div>
+            <input type="range" id="quizVolume" min="0" max="1" step="0.01" value="1" class="quiz__volume">
+          </div>
+          <p class="quiz__preview-link" id="quizPreviewLink" style="margin-top:12px;font-size:13px;color:var(--muted);">Prévia exclusiva: link a ser configurado.</p>
         </div>
+        <div class="quiz__fail" id="quizFail" hidden>
+          <p class="quiz__score" id="quizScore"></p>
+          <p class="quiz__result-msg" id="quizResultMsg"></p>
+          <button class="btn btn--ghost" id="quizRestart" type="button">Refazer quiz</button>
+        </div>
+      </div>
       </div>
     </div>
   </section>
 
-  <section class="gallery999" id="gallery999">
-    <div class="gallery999__card">
-      <h2 class="gallery999__title">999</h2>
-      <p class="gallery999__intro">Toque para ver todas as imagens.</p>
-      <button class="gallery999__cover" id="gallery999Cover" type="button">
-        <img src="assets/999/IMG_4610.jpg" alt="999 capa">
+  <section class="guide-card" id="guideCard">
+    <div class="guide-card__inner">
+      <button class="guide-card__play" id="guidePlayBtn" type="button" disabled aria-disabled="true">
+        <span class="guide-card__icon">▶</span>
+        <span class="guide-card__text">Ouvir guia exclusiva</span>
       </button>
+      <p class="guide-card__status" id="guideStatus">Bloqueado — acerte todas as perguntas.</p>
+      <div class="guide-card__player" id="guidePlayer" hidden>
+        <audio id="guideAudio" src="assets/amarelice.mp3" preload="metadata"></audio>
+        <div class="guide-card__controls">
+          <button class="btn btn--primary" id="guidePlay" type="button">▶ Play</button>
+          <button class="btn btn--ghost" id="guidePause" type="button" hidden>⏸ Pause</button>
+          <span class="guide-card__player-status" id="guidePlayerStatus">Pronto</span>
+        </div>
+        <input type="range" id="guideVolume" min="0" max="1" step="0.01" value="1" class="quiz__volume">
+      </div>
     </div>
   </section>
-
-  <div class="lightbox999" id="lightbox999" hidden>
-    <div class="lightbox999__backdrop" id="lightbox999Backdrop"></div>
-    <div class="lightbox999__content">
-      <button class="lightbox999__close" id="lightbox999Close" type="button">✕</button>
-      <div class="lightbox999__grid" id="lightbox999Grid"></div>
-    </div>
-  </div>
-
-  <div class="imgviewer999" id="imgviewer999" hidden>
-    <div class="imgviewer999__backdrop" id="imgviewer999Backdrop"></div>
-    <img class="imgviewer999__img" id="imgviewer999Img" alt="999">
-    <button class="imgviewer999__close" id="imgviewer999Close" type="button">✕</button>
-  </div>
+  <footer class="footer">
     <p>ORIENTAL — NEGO MARLEY · Experiência artística</p>
   </footer>
 </main>
@@ -169,6 +174,15 @@
 </div>
 
 <audio id="bgMusic" src="assets/musica.wav" loop preload="auto"></audio>
+<script>
+window.onerror = function(msg, url, line, col, err){
+  var d = document.getElementById('debugBox');
+  if(!d){ d = document.createElement('div'); d.id='debugBox'; d.style.cssText='position:fixed;bottom:0;left:0;right:0;background:#f00;color:#fff;padding:8px;font-size:12px;z-index:9999;max-height:200px;overflow:auto;'; document.body.appendChild(d); }
+  d.textContent += msg + ' (line ' + line + ')\n';
+  return false;
+};
+console.log('HTML loaded');
+</script>
 <script src="quiz-data.js"></script>
 <script src="app.js"></script>
 <script>

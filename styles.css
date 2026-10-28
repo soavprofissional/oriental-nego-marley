@@ -113,8 +113,7 @@ img{max-width:100%;display:block}
 .intro__vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.7) 100%);pointer-events:none}
 
 .intro__ui{
-  position:absolute;left:0;right:0;bottom:12vh;text-align:center;pointer-events:none;
-  transition:opacity .6s ease;
+  position:absolute;left:0;right:0;bottom:12vh;text-align:center;pointer-events:none;z-index:10;
 }
 .intro.is-approach .intro__ui,.intro.is-city .intro__ui{opacity:0}
 .intro__kicker{letter-spacing:.4em;font-size:clamp(11px,2.6vw,14px);color:var(--gold);margin-bottom:8px}
@@ -157,6 +156,9 @@ img{max-width:100%;display:block}
 .hero__title{font-size:clamp(46px,13vw,96px);font-weight:900;letter-spacing:.14em;text-shadow:0 0 40px rgba(212,175,55,.35)}
 .hero__artist{font-size:clamp(16px,4vw,22px);letter-spacing:.35em;color:var(--muted)}
 .hero__tag{margin-top:6px;font-size:13px;color:var(--blue-soft)}
+
+.hero__globe{display:block;margin:0 auto;max-width:100%}
+.hero__logo{display:block;margin:0 auto;max-width:100%}
 
 
 /* ============ GALLERY 999 ============ */
@@ -436,7 +438,6 @@ img{max-width:100%;display:block}
 
 /* ============ SOLAR SYSTEM (intro bg) ============ */
 .orbit{position:absolute;top:50%;left:50%;border:1px solid rgba(212,175,55,.12);border-radius:50%;transform:translate(-50%,-50%)}
-.planet{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);border-radius:50%}
 
 .sun-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(90vw,480px);height:min(90vw,480px);border:2px solid rgba(212,175,55,.6);border-radius:50%;box-shadow:0 0 40px rgba(212,175,55,.4),inset 0 0 30px rgba(212,175,55,.15)}
 
@@ -579,3 +580,29 @@ img{max-width:100%;display:block}
 .imgviewer999__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.9)}
 .imgviewer999__img{max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:0 0 40px rgba(0,0,0,.6);position:relative;z-index:1}
 .imgviewer999__close{position:absolute;top:16px;right:20px;font-size:28px;color:#fff;background:none;border:none;cursor:pointer;z-index:2}
+
+/* ============ GUIDE CARD ============ */
+.guide-card{padding:24px 16px 60px;display:flex;justify-content:center}
+.guide-card__inner{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;backdrop-filter:blur(10px)}
+.guide-card__play{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 18px;border-radius:12px;border:1px solid rgba(212,175,55,.4);background:rgba(10,12,30,.85);color:#fff;cursor:pointer;transition:background .2s,transform .15s,opacity .2s;font-weight:600}
+.guide-card__play:disabled{opacity:.45;cursor:not-allowed}
+.guide-card__play:not(:disabled):hover{background:rgba(255,255,255,.12);transform:translateY(-2px);box-shadow:0 0 12px rgba(212,175,55,.2)}
+.guide-card__icon{font-size:18px;color:var(--gold)}
+.guide-card__text{letter-spacing:.1em}
+.guide-card__status{margin-top:10px;font-size:13px;color:var(--muted)}
+.guide-card__player{margin-top:14px}
+.guide-card__controls{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.guide-card__player-status{font-size:12px;color:var(--muted);letter-spacing:.15em}
+
+/* ============ QUIZ SCORE LIVE ============ */
+.quiz__score-live{font-size:13px;color:var(--gold-soft);text-align:center;margin-bottom:12px;letter-spacing:.1em}
+
+/* ============ QUIZ REWARD ============ */
+.quiz__reward{padding:20px;text-align:center;animation:reveal .6s ease}
+.quiz__reward-title{font-size:20px;letter-spacing:.2em;color:var(--gold);margin-bottom:10px}
+.quiz__reward-text{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:16px;font-style:italic}
+.quiz__player{background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.2);border-radius:12px;padding:14px;margin-top:10px}
+.quiz__player-controls{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.quiz__player-status{font-size:12px;color:var(--muted);letter-spacing:.15em}
+.quiz__volume{width:100%;accent-color:var(--gold)}
+.quiz__fail{text-align:center;padding:10px}
