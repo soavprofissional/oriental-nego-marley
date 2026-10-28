@@ -145,6 +145,7 @@ const quizVideo = document.getElementById('quizVideo');
 let qIndex = 0;
 let qScore = 0;
 let qAnswered = false;
+let qTimer = null;
 
 function updateProgress(){
   const total = QUIZ_DATA.length;
@@ -190,7 +191,19 @@ function selectAnswer(i, btn){
     quizFeedback.textContent = correct ? 'Correto!' : 'Errado. A resposta correta foi destacada.';
     quizFeedback.className = 'quiz__feedback ' + (correct ? 'is-correct' : 'is-wrong');
   }
-  if(quizNext) quizNext.hidden = false;
+  if(quizNext) quizNext.hidden = true;
+  // auto-advance to next question
+  if(qTimer) clearTimeout(qTimer);
+  qTimer = setTimeout(() => {
+    qIndex++;
+    if(quizQuestion) quizQuestion.parentElement.style.display = '';
+    if(quizOptions) quizOptions.style.display = '';
+    if(qIndex >= QUIZ_DATA.length){
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }, 1500);
 }
 
 function showResult(){
@@ -226,6 +239,7 @@ if(quizNext){
 }
 if(quizRestart){
   quizRestart.addEventListener('click', () => {
+    if(qTimer) clearTimeout(qTimer);
     qIndex = 0; qScore = 0; qAnswered = false;
     if(quizResult) quizResult.hidden = true;
     if(quizQuestion) quizQuestion.parentElement.style.display = '';
