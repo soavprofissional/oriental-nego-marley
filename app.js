@@ -31,6 +31,7 @@
   window.addEventListener('resize', resizeStars);
 
   let starsRunning = true;
+  document.addEventListener('visibilitychange', () => { starsRunning = !document.hidden; if(starsRunning) drawStars(); });
   function drawStars(){
     if(!starsRunning) return;
     ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
@@ -67,6 +68,24 @@
   }
   soundBtn.addEventListener('click', toggleSound);
 
+  // ---------- Main page controls ----------
+  const mainSoundBtn = document.getElementById('mainSoundBtn');
+  const mainIntroBtn = document.getElementById('mainIntroBtn');
+  if(mainSoundBtn){
+    mainSoundBtn.addEventListener('click', () => {
+      toggleSound();
+      mainSoundBtn.textContent = soundOn ? 'Som: ligado' : 'Som: desligado';
+    });
+  }
+  if(mainIntroBtn){
+    mainIntroBtn.addEventListener('click', () => {
+      const intro = document.getElementById('intro');
+      const main = document.getElementById('main');
+      if(intro){ intro.style.display=''; intro.classList.remove('is-done','is-leaving'); intro.style.opacity=''; intro.style.filter=''; intro.setAttribute('aria-hidden','false'); }
+      if(main){ main.hidden = true; main.classList.remove('is-visible'); }
+    });
+  }
+
   // ---------- Intro sequence ----------
   let introDone = false;
   function finishIntro(){
@@ -101,222 +120,124 @@
   }
 
   const enterBtn = document.getElementById('enterBtn');
-  console.log('enterBtn found:', !!enterBtn);
-  if(enterBtn) enterBtn.addEventListener('click', () => { console.log('clicked'); finishIntro(); });
+  if(enterBtn) enterBtn.addEventListener('click', finishIntro);
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && !introDone) finishIntro(); });
 
   // intro stays static until user clicks 'Ir para Oriental' or 'Pular'
 
-  // ---------- Origami transform ----------
-  const transformBtn = document.getElementById('transformBtn');
-  const resetBtn = document.getElementById('resetBtn');
-  const origami = document.getElementById('origami');
-  const pendant = document.getElementById('pendantReveal');
-  const clue = document.getElementById('clue');
-  const particles = document.getElementById('particles');
-  const pctx = particles.getContext('2d');
+  // ---------- Quiz ----------
+const MIN_SCORE = 0.7; // pontuação mínima para liberar o vídeo (70%)
+const UNLOCK_KEY = 'oriental_quiz_unlocked';
 
-  function resizeParticles(){
-    const r = particles.parentElement.getBoundingClientRect();
-    particles.width = r.width * devicePixelRatio;
-    particles.height = r.height * devicePixelRatio;
-    particles.style.width = r.width + 'px';
-    particles.style.height = r.height + 'px';
-    pctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+const quizQuestion = document.getElementById('quizQuestion');
+const quizOptions = document.getElementById('quizOptions');
+const quizFeedback = document.getElementById('quizFeedback');
+const quizNext = document.getElementById('quizNext');
+const quizRestart = document.getElementById('quizRestart');
+const quizResult = document.getElementById('quizResult');
+const quizScore = document.getElementById('quizScore');
+const quizResultMsg = document.getElementById('quizResultMsg');
+const quizProgressBar = document.getElementById('quizProgressBar');
+const quizProgressLabel = document.getElementById('quizProgressLabel');
+const quizVideoWrap = document.getElementById('quizVideoWrap');
+const quizVideo = document.getElementById('quizVideo');
+
+let qIndex = 0;
+let qScore = 0;
+let qAnswered = false;
+
+function updateProgress(){
+  const total = QUIZ_DATA.length;
+  const pct = (qIndex / total) * 100;
+  if(quizProgressBar) quizProgressBar.style.width = pct + '%';
+  if(quizProgressLabel) quizProgressLabel.textContent = `Pergunta ${Math.min(qIndex+1,total)} de ${total}`;
+}
+
+function renderQuestion(){
+  if(!QUIZ_DATA || qIndex >= QUIZ_DATA.length){ showResult(); return; }
+  const q = QUIZ_DATA[qIndex];
+  qAnswered = false;
+  if(quizQuestion){ quizQuestion.classList.remove('is-entering'); void quizQuestion.offsetWidth; quizQuestion.classList.add('is-entering'); quizQuestion.textContent = q.pergunta; }
+  if(quizOptions){
+    quizOptions.innerHTML = '';
+    q.alternativas.forEach((alt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz__option';
+      btn.textContent = alt;
+      btn.addEventListener('click', () => selectAnswer(i, btn));
+      quizOptions.appendChild(btn);
+    });
   }
-  resizeParticles();
-  window.addEventListener('resize', resizeParticles);
+  if(quizFeedback){ quizFeedback.hidden = true; quizFeedback.className='quiz__feedback'; }
+  if(quizNext) quizNext.hidden = true;
+  updateProgress();
+}
 
-  let transforming = false;
-  function burstParticles(){
-    const r = particles.parentElement.getBoundingClientRect();
-    const cx = r.width/2, cy = r.height/2;
-    const pts = Array.from({length:48}, () => ({
-      x: cx, y: cy,
-      vx: (Math.random()-0.5)*6,
-      vy: (Math.random()-0.5)*6 - 1,
-      life: 1,
-      decay: Math.random()*0.02 + 0.015,
-      size: Math.random()*2 + 1,
-      color: Math.random() > 0.5 ? '#d4af37' : '#4f7cff'
-    }));
-    let running = true;
-    function step(){
-      if(!running) return;
-      pctx.clearRect(0,0,r.width,r.height);
-      let alive = false;
-      for(const p of pts){
-        if(p.life <= 0) continue;
-        alive = true;
-        p.x += p.vx; p.y += p.vy;
-        p.vy += 0.05;
-        p.life -= p.decay;
-        pctx.globalAlpha = Math.max(0,p.life);
-        pctx.fillStyle = p.color;
-        pctx.beginPath();
-        pctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-        pctx.fill();
-      }
-      pctx.globalAlpha = 1;
-      if(alive) requestAnimationFrame(step);
-      else pctx.clearRect(0,0,r.width,r.height);
-    }
-    step();
-  }
-
-  function transform(){
-    if(transforming) return;
-    transforming = true;
-    transformBtn.disabled = true;
-    origami.classList.add('is-hidden');
-    setTimeout(() => {
-      burstParticles();
-      pendant.classList.add('is-shown');
-    }, 300);
-    setTimeout(() => {
-      clue.hidden = false;
-      transforming = false;
-      const e2 = document.getElementById('enigma2');
-      if(e2){ e2.hidden = false; setTimeout(() => e2.scrollIntoView({behavior:'smooth'}), 100); }
-      setStep(2);
-    }, 1100);
-  }
-
-  function reset(){
-    origami.classList.remove('is-hidden');
-    pendant.classList.remove('is-shown');
-    clue.hidden = true;
-    transformBtn.disabled = false;
-    transforming = false;
-    const r = particles.parentElement.getBoundingClientRect();
-    pctx.clearRect(0,0,r.width,r.height);
-  }
-
-  transformBtn.addEventListener('click', transform);
-  resetBtn.addEventListener('click', reset);
-  window.finishIntro = finishIntro;
-})();
-
-// ---------- Progress ----------
-const progressLabel = document.getElementById('progressLabel');
-const dots = document.querySelectorAll('.dot');
-let currentStep = 1;
-function setStep(n){
-  currentStep = n;
-  dots.forEach(d => {
-    const s = +d.dataset.step;
-    d.classList.toggle('is-done', s < n);
-    d.classList.toggle('is-current', s === n);
+function selectAnswer(i, btn){
+  if(qAnswered) return;
+  qAnswered = true;
+  const q = QUIZ_DATA[qIndex];
+  const correct = i === q.respostaCorreta;
+  if(correct){ qScore++; }
+  // mark buttons
+  [...quizOptions.children].forEach((b, idx) => {
+    b.disabled = true;
+    if(idx === q.respostaCorreta) b.classList.add('is-correct');
+    if(idx === i && !correct) b.classList.add('is-wrong');
   });
-  if(progressLabel) progressLabel.textContent = `Etapa ${n} de 4`;
-}
-
-// ---------- Enigma 2: grade dourada ----------
-const gridpad = document.getElementById('gridpad');
-const pads = gridpad ? [...gridpad.querySelectorAll('.pad')] : [];
-const showSeqBtn = document.getElementById('showSeqBtn');
-const resetSeqBtn = document.getElementById('resetSeqBtn');
-const clue2 = document.getElementById('clue2');
-let seq = [];
-let userSeq = [];
-let showing = false;
-
-function randomSeq(len=4){
-  return Array.from({length:len}, () => Math.floor(Math.random()*9));
-}
-function lightPad(i, cls='is-lit', ms=350){
-  const p = pads[i];
-  if(!p) return;
-  p.classList.add(cls);
-  setTimeout(() => p.classList.remove(cls), ms);
-}
-function playSeq(){
-  showing = true;
-  userSeq = [];
-  let i = 0;
-  const iv = setInterval(() => {
-    if(i >= seq.length){ clearInterval(iv); showing = false; return; }
-    lightPad(seq[i]);
-    i++;
-  }, 550);
-}
-function handlePadClick(e){
-  const btn = e.target.closest('.pad');
-  if(!btn || showing) return;
-  const i = +btn.dataset.i;
-  userSeq.push(i);
-  lightPad(i, 'is-lit', 200);
-  const idx = userSeq.length - 1;
-  if(seq[idx] !== i){
-    lightPad(i, 'is-wrong', 400);
-    // reset attempt
-    setTimeout(() => { userSeq = []; }, 400);
-    return;
+  if(quizFeedback){
+    quizFeedback.hidden = false;
+    quizFeedback.textContent = correct ? 'Correto!' : 'Errado. A resposta correta foi destacada.';
+    quizFeedback.className = 'quiz__feedback ' + (correct ? 'is-correct' : 'is-wrong');
   }
-  if(userSeq.length === seq.length){
-    pads.forEach(p => p.classList.add('is-right'));
-    setTimeout(() => pads.forEach(p => p.classList.remove('is-right')), 700);
-    clue2.hidden = false;
-    setStep(3);
-    const e3 = document.getElementById('enigma3');
-    if(e3){ e3.hidden = false; setTimeout(() => e3.scrollIntoView({behavior:'smooth'}), 100); }
+  if(quizNext) quizNext.hidden = false;
+}
+
+function showResult(){
+  if(quizQuestion) quizQuestion.parentElement.style.display = 'none';
+  if(quizOptions) quizOptions.style.display = 'none';
+  if(quizNext) quizNext.hidden = true;
+  if(quizProgressLabel) quizProgressLabel.textContent = 'Concluído';
+  if(quizProgressBar) quizProgressBar.style.width = '100%';
+  if(quizResult){ quizResult.hidden = false; }
+  const total = QUIZ_DATA.length;
+  const pct = qScore / total;
+  if(quizScore) quizScore.textContent = `${qScore} / ${total} (${Math.round(pct*100)}%)`;
+  const unlocked = localStorage.getItem(UNLOCK_KEY) === 'true' || pct >= MIN_SCORE;
+  if(unlocked){
+    localStorage.setItem(UNLOCK_KEY, 'true');
+    if(quizResultMsg) quizResultMsg.textContent = 'Parabéns! Você desbloqueou o vídeo exclusivo.';
+    if(quizVideoWrap) quizVideoWrap.hidden = false;
+  } else {
+    if(quizResultMsg) quizResultMsg.textContent = 'Você não atingiu o mínimo. Tente novamente para desbloquear o vídeo.';
+    if(quizRestart) quizRestart.hidden = false;
+    if(quizVideoWrap) quizVideoWrap.hidden = true;
   }
 }
-if(gridpad) gridpad.addEventListener('click', handlePadClick);
-if(showSeqBtn) showSeqBtn.addEventListener('click', () => {
-  if(seq.length === 0) seq = randomSeq(4);
-  playSeq();
-});
-if(resetSeqBtn) resetSeqBtn.addEventListener('click', () => {
-  seq = randomSeq(4);
-  userSeq = [];
-  clue2.hidden = true;
-  pads.forEach(p => p.classList.remove('is-right','is-wrong','is-lit'));
-});
 
-// ---------- Enigma 3: globo gira ----------
-const rotorMarker = document.getElementById('rotorMarker');
-const rotorValue = document.getElementById('rotorValue');
-const rotorSlider = document.getElementById('rotorSlider');
-const checkAngleBtn = document.getElementById('checkAngleBtn');
-const clue3 = document.getElementById('clue3');
-const targetAngle = 360;
-
-function revealFinal(){
-  const finale = document.getElementById('finale');
-  if(finale){ finale.hidden = false; finale.style.display = 'flex'; }
-  if(clue3) clue3.hidden = false;
-  setStep(4);
-  const st = document.getElementById('rotorStatus');
-  if(st) st.textContent = 'Final revelado!';
-  setTimeout(() => { if(finale) finale.scrollIntoView({behavior:'smooth'}); }, 200);
-}
-if(rotorSlider){
-  rotorSlider.addEventListener('input', () => {
-    const v = +rotorSlider.value;
-    if(rotorMarker) rotorMarker.style.transform = `translate(-50%,0) rotate(${v}deg)`;
-    if(rotorValue) rotorValue.textContent = `${v}°`;
-    const st = document.getElementById('rotorStatus');
-    if(st) st.textContent = `Ângulo: ${v}° (alvo ${targetAngle}°)`;
-    if(Math.abs(v - targetAngle) <= 15){ revealFinal(); }
+if(quizNext){
+  quizNext.addEventListener('click', () => {
+    qIndex++;
+    // restore question UI
+    if(quizQuestion) quizQuestion.parentElement.style.display = '';
+    if(quizOptions) quizOptions.style.display = '';
+    renderQuestion();
   });
 }
-if(checkAngleBtn){
-  checkAngleBtn.addEventListener('click', () => {
-    const v = +rotorSlider.value;
-    if(Math.abs(v - targetAngle) <= 15){
-      revealFinal();
-    } else {
-      checkAngleBtn.textContent = 'Tente novamente';
-      const st = document.getElementById('rotorStatus');
-      if(st) st.textContent = `Errou. Atual ${v}°, alvo ${targetAngle}°`;
-      setTimeout(() => { checkAngleBtn.textContent = 'Confirmar'; }, 1200);
-    }
+if(quizRestart){
+  quizRestart.addEventListener('click', () => {
+    qIndex = 0; qScore = 0; qAnswered = false;
+    if(quizResult) quizResult.hidden = true;
+    if(quizQuestion) quizQuestion.parentElement.style.display = '';
+    if(quizOptions) quizOptions.style.display = '';
+    if(quizRestart) quizRestart.hidden = true;
+    if(quizVideoWrap) quizVideoWrap.hidden = true;
+    renderQuestion();
   });
 }
 
-// initial
-setStep(1);
+// If already unlocked, mark so video shows after completion
+renderQuestion();
 
 // ---------- Omikuji (biscoito da sorte) ----------
 const omikuji = document.getElementById('omikuji');
@@ -374,11 +295,6 @@ if(omikujiBackdrop) omikujiBackdrop.addEventListener('click', closeOmikuji);
 if(omikujiBreak) omikujiBreak.addEventListener('click', breakCookie);
 if(omikujiAgain) omikujiAgain.addEventListener('click', () => { resetCookie(); setTimeout(breakCookie, 100); });
 
-// ---------- Ensure final appears when enigma3 completes ----------
-const clue3El = document.getElementById('clue3');
-if(clue3El){
-  const obs = new MutationObserver(() => {
-    if(!clue3El.hidden){ revealFinal(); }
-  });
-  obs.observe(clue3El, {attributes:true, attributeFilter:['hidden']});
-}
+
+  window.finishIntro = finishIntro;
+})();

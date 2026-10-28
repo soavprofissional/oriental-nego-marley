@@ -55,141 +55,63 @@
 <main id="main" class="main" hidden>
   <div class="main__bg" aria-hidden="true"></div>
   <div class="main__overlay" aria-hidden="true"></div>
+  <div class="main__controls">
+    <button class="main__sound" id="mainSoundBtn" type="button">Som: desligado</button>
+    <button class="main__intro" id="mainIntroBtn" type="button">Ver intro</button>
+  </div>
 
   <section class="hero">
-    <button class="hero__pendant" id="pendantBtn" type="button" aria-label="Abrir biscoito da sorte">
-      <span class="hero__cord"></span>
-      <img class="hero__pendant-img" src="assets/pingente.png" alt="Pingente de Nego Marley">
-      <span class="hero__pendant-glow"></span>
-    </button>
-    <p class="hero__hint">Clique no pingente para abrir seu biscoito da sorte japonês</p>
+    <img class="hero__globe" src="assets/intro.png" alt="Globo">
     <p class="hero__kicker">ÁLBUM CONCEITUAL</p>
     <img class="hero__logo" src="assets/logo.png" alt="ORIENTAL">
     <p class="hero__artist">NEGOMARLEY</p>
     <p class="hero__tag">Experiência artística interativa</p>
   </section>
 
-  <section class="enigma">
-    <div class="enigma__card">
-      <h2 class="enigma__title">O ENIGMA DO ORIGAMI</h2>
-      <p class="enigma__text">
-        Uma folha de papel guarda um segredo. Dobre-a com o olhar e revele o que ela esconde.
-      </p>
+  
 
-      <div class="stage" id="stage">
-        <div class="stage__origami" id="origami" aria-label="Origami">
-          <div class="paper">
-            <div class="paper__sheet"></div>
-            <div class="paper__fold"></div>
-          </div>
-          <span class="origami__label">ORIGAMI</span>
+
+  
+
+  
+
+  
+
+  
+
+
+  <section class="quiz" id="quiz">
+    <div class="quiz__card">
+      <h2 class="quiz__title"><span class="quiz__word">QUIZ</span><img src="assets/logo.png" alt="ORIENTAL" class="quiz__logo"></h2>
+      <p class="quiz__intro">Responda as perguntas e desbloqueie o vídeo exclusivo.</p>
+
+      <div class="quiz__progress">
+        <div class="quiz__progress-bar" id="quizProgressBar"></div>
+      </div>
+      <p class="quiz__progress-label" id="quizProgressLabel">Pergunta 1 de 3</p>
+
+      <div class="quiz__question" id="quizQuestion"></div>
+      <div class="quiz__options" id="quizOptions"></div>
+
+      <div class="quiz__feedback" id="quizFeedback" hidden></div>
+
+      <div class="quiz__actions">
+        <button class="btn btn--primary" id="quizNext" type="button" hidden>Próxima</button>
+        <button class="btn btn--ghost" id="quizRestart" type="button" hidden>Refazer quiz</button>
+      </div>
+
+      <div class="quiz__result" id="quizResult" hidden>
+        <h3 class="quiz__result-title">Resultado</h3>
+        <p class="quiz__score" id="quizScore"></p>
+        <p class="quiz__result-msg" id="quizResultMsg"></p>
+        <div class="quiz__video" id="quizVideoWrap" hidden>
+          <h4 class="quiz__video-title">Vídeo exclusivo</h4>
+          <p class="quiz__video-desc">Música inédita de ORIENTAL — NEGO MARLEY.</p>
+          <video id="quizVideo" controls controlsList="nodownload" preload="none" playsinline style="width:100%;border-radius:12px;">
+            <source src="public/videos/video.mp4" type="video/mp4">
+            Seu navegador não suporta vídeo.
+          </video>
         </div>
-
-        <canvas class="stage__particles" id="particles" aria-hidden="true"></canvas>
-
-        <div class="stage__pendant" id="pendantReveal" aria-hidden="true">
-          <img src="assets/pingente.png" alt="Pingente de Nego Marley">
-          <span class="stage__pendant-glow"></span>
-        </div>
-      </div>
-
-      <div class="enigma__actions">
-        <button class="btn btn--primary" id="transformBtn" type="button">Transformar origami</button>
-        <button class="btn btn--ghost" id="resetBtn" type="button">Reiniciar</button>
-      </div>
-
-      <div class="clue" id="clue" hidden>
-        <p class="clue__label">PRÓXIMA PISTA</p>
-        <p class="clue__text">
-          “O globo azul gira onde o sol nasce vermelho. Siga a grade dourada até o nome que não se diz duas vezes.”
-        </p>
-      </div>
-    </div>
-  </section>
-
-
-  <section class="progress" aria-label="Progresso">
-    <div class="progress__dots">
-      <span class="dot is-done" data-step="1"></span>
-      <span class="dot" data-step="2"></span>
-      <span class="dot" data-step="3"></span>
-      <span class="dot" data-step="4"></span>
-    </div>
-    <p class="progress__label" id="progressLabel">Etapa 1 de 4</p>
-  </section>
-
-  <section class="enigma enigma--2" id="enigma2" hidden>
-    <div class="enigma__card">
-      <h2 class="enigma__title">ENIGMA 02 · A GRADE DOURADA</h2>
-      <p class="enigma__text">
-        Memorize a sequência que a grade revela. Repita-a para decifrar o próximo símbolo.
-      </p>
-      <div class="gridpad" id="gridpad">
-        <button class="pad" data-i="0" aria-label="célula 1"></button>
-        <button class="pad" data-i="1" aria-label="célula 2"></button>
-        <button class="pad" data-i="2" aria-label="célula 3"></button>
-        <button class="pad" data-i="3" aria-label="célula 4"></button>
-        <button class="pad" data-i="4" aria-label="célula 5"></button>
-        <button class="pad" data-i="5" aria-label="célula 6"></button>
-        <button class="pad" data-i="6" aria-label="célula 7"></button>
-        <button class="pad" data-i="7" aria-label="célula 8"></button>
-        <button class="pad" data-i="8" aria-label="célula 9"></button>
-      </div>
-      <div class="enigma__actions">
-        <button class="btn btn--primary" id="showSeqBtn" type="button">Revelar sequência</button>
-        <button class="btn btn--ghost" id="resetSeqBtn" type="button">Reiniciar</button>
-      </div>
-      <div class="clue" id="clue2" hidden>
-        <p class="clue__label">PRÓXIMA PISTA</p>
-        <p class="clue__text">
-          “Onde a grade se cruza, o azul se torna porta. Três passos à esquerda do sol.”
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="enigma enigma--3" id="enigma3" hidden>
-    <div class="enigma__card">
-      <h2 class="enigma__title">ENIGMA 03 · O GLOBO GIRA</h2>
-      <p class="enigma__text">
-        Alinhe o globo ao ponto de chegada. Arraste o controle até o ângulo revelado.
-      </p>
-      <div class="rotor" id="rotor">
-        <div class="rotor__ring">
-          <span class="rotor__marker" id="rotorMarker"></span>
-        </div>
-        <div class="rotor__value" id="rotorValue">0°</div>
-      </div>
-      <input type="range" id="rotorSlider" min="0" max="360" value="0" class="rotor__slider" aria-label="Ângulo do globo">
-      <p id="rotorStatus" style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">Arraste até 210°</p>
-      <div class="enigma__actions">
-        <button class="btn btn--primary" id="checkAngleBtn" type="button">Confirmar</button>
-      </div>
-      <div class="clue" id="clue3" hidden>
-        <p class="clue__label">PRÓXIMA PISTA</p>
-        <p class="clue__text">
-          “A última chave não está no código, mas no silêncio entre duas notas.”
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="finale" id="finale" hidden>
-    <div class="finale__card">
-      <h2 class="finale__title">VOCÊ CHEGOU</h2>
-      <p class="finale__text">
-        A viagem do espaço ao Japão se completa. O universo de ORIENTAL se abre diante de você.
-      </p>
-      <div class="finale__row">
-        <img src="assets/fundo.jpg" alt="Arte do álbum ORIENTAL" class="finale__art">
-        <a class="spotify-btn" href="https://open.spotify.com/intl-pt/artist/6bsYNLyX6PJKvoq5VmOnpu?si=7QDjqxLVSqSLXV9OO1pkAQ" target="_blank" rel="noopener noreferrer" aria-label="Abrir perfil de Nego Marley no Spotify">
-          <span class="spotify-btn__icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.241 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.781-.18-.601.18-1.2.78-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.619.3z"/>
-            </svg>
-          </span>
-          <span class="spotify-btn__label">Ouvir no Spotify</span>
-        </a>
       </div>
     </div>
   </section>
@@ -224,13 +146,18 @@
 </div>
 
 <audio id="bgMusic" src="assets/musica.wav" loop preload="auto"></audio>
+<script src="quiz-data.js"></script>
 <script src="app.js"></script>
 <script>
 document.getElementById('enterBtn').addEventListener('click', function(){
-  document.getElementById('intro').style.display='none';
-  var m=document.getElementById('main');
-  m.removeAttribute('hidden');
-  m.classList.add('is-visible');
+  var intro = document.getElementById('intro');
+  var main = document.getElementById('main');
+  intro.classList.add('is-leaving');
+  setTimeout(function(){
+    intro.style.display='none';
+    main.removeAttribute('hidden');
+    requestAnimationFrame(function(){ main.classList.add('is-visible'); });
+  }, 700);
 });
 </script>
 </body>
