@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#05060d">
+<title>ORIENTAL — Nego Marley</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- INTRO CINEMATOGRÁFICA -->
+<div id="intro" class="intro" aria-hidden="false">
+  <canvas id="stars" class="intro__stars"></canvas>
+  <div class="galaxy" aria-hidden="true">
+    <div class="nebula nebula--a"></div>
+    <div class="nebula nebula--b"></div>
+    <div class="nebula nebula--c"></div>
+    <div class="milkyway"></div>
+  </div>
+  <div class="static-planets" aria-hidden="true">
+    <span class="sp sp--1"></span>
+    <span class="sp sp--2"></span>
+    <span class="sp sp--3"></span>
+    <span class="sp sp--4"></span>
+    <span class="sp sp--5"></span>
+  </div>
+  <div class="comets" aria-hidden="true">
+    <span class="comet comet--1"></span>
+    <span class="comet comet--2"></span>
+    <span class="comet comet--3"></span>
+  </div>
+
+  <div class="intro__planet-wrap" id="planetWrap">
+    <img class="planet" id="planet" src="assets/intro.png" alt="Globo">
+  </div>
+
+  <div class="intro__ui">
+    <img class="intro__logo" src="assets/logo.png" alt="ORIENTAL">
+    <button class="intro__enter" id="enterBtn" type="button">Ir para Oriental</button>
+  </div>
+
+  <div class="intro__city" id="city">
+    <div class="city__sky"></div>
+    <div class="city__lights"></div>
+    <div class="city__glow city__glow--red"></div>
+    <div class="city__glow city__glow--blue"></div>
+  </div>
+
+  <div class="intro__vignette"></div>
+
+  <button class="intro__sound" id="soundToggle" type="button" aria-pressed="false">Som: desligado</button>
+</div>
+
+<!-- INTERFACE PRINCIPAL -->
+<main id="main" class="main" hidden>
+  <div class="main__bg" aria-hidden="true"></div>
+  <div class="main__overlay" aria-hidden="true"></div>
+  <div class="main__controls">
+    <button class="main__sound" id="mainSoundBtn" type="button">Som: desligado</button>
+    <button class="main__intro" id="mainIntroBtn" type="button">Ver intro</button>
+  </div>
+
+  <section class="hero">
+    <img class="hero__globe" src="assets/intro.png" alt="Globo">
+    <p class="hero__kicker">ÁLBUM CONCEITUAL</p>
+    <img class="hero__logo" src="assets/logo.png" alt="ORIENTAL">
+    <p class="hero__artist">NEGOMARLEY</p>
+    <p class="hero__tag">Experiência artística interativa</p>
+  </section>
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+
+  <section class="quiz" id="quiz">
+    <div class="quiz__card">
+      <h2 class="quiz__title"><span class="quiz__word">QUIZ</span><img src="assets/logo.png" alt="ORIENTAL" class="quiz__logo"></h2>
+      <p class="quiz__intro">Responda as perguntas e desbloqueie o vídeo exclusivo.</p>
+
+      <div class="quiz__progress">
+        <div class="quiz__progress-bar" id="quizProgressBar"></div>
+      </div>
+      <p class="quiz__progress-label" id="quizProgressLabel">Pergunta 1 de 3</p>
+
+      <div class="quiz__question" id="quizQuestion"></div>
+      <div class="quiz__options" id="quizOptions"></div>
+
+      <div class="quiz__feedback" id="quizFeedback" hidden></div>
+
+      <div class="quiz__actions">
+        <button class="btn btn--primary" id="quizNext" type="button" hidden>Próxima</button>
+        <button class="btn btn--ghost" id="quizRestart" type="button" hidden>Refazer quiz</button>
+      </div>
+
+      <div class="quiz__result" id="quizResult" hidden>
+        <h3 class="quiz__result-title">Resultado</h3>
+        <p class="quiz__score" id="quizScore"></p>
+        <p class="quiz__result-msg" id="quizResultMsg"></p>
+        <div class="quiz__video" id="quizVideoWrap" hidden>
+          <h4 class="quiz__video-title">Vídeo exclusivo</h4>
+          <p class="quiz__video-desc">Música inédita de ORIENTAL — NEGO MARLEY.</p>
+          <video id="quizVideo" controls controlsList="nodownload" preload="none" playsinline style="width:100%;border-radius:12px;">
+            <source src="public/videos/video.mp4" type="video/mp4">
+            Seu navegador não suporta vídeo.
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>ORIENTAL — NEGO MARLEY · Experiência artística</p>
+  </footer>
+</main>
+
+
+<!-- OMIKUJI MODAL -->
+<div class="omikuji" id="omikuji" hidden>
+  <div class="omikuji__backdrop" id="omikujiBackdrop"></div>
+  <div class="omikuji__card" role="dialog" aria-modal="true" aria-labelledby="omikujiTitle">
+    <p class="omikuji__label">OMIKUJI · BISCOITO DA SORTE</p>
+    <div class="cookie-wrap" id="cookieWrap">
+      <div class="cookie">
+        <div class="cookie__half cookie__half--left"></div>
+        <div class="cookie__half cookie__half--right"></div>
+        <div class="cookie__paper" id="cookiePaper">
+          <p class="cookie__msg" id="omikujiMsg"></p>
+        </div>
+      </div>
+    </div>
+    <h3 class="omikuji__title" id="omikujiTitle">Quebre o biscoito</h3>
+    <div class="omikuji__actions">
+      <button class="btn btn--primary" id="omikujiBreak" type="button">Quebrar biscoito</button>
+      <button class="btn btn--ghost" id="omikujiAgain" type="button">Outro biscoito</button>
+      <button class="btn btn--ghost" id="omikujiClose" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<audio id="bgMusic" src="assets/musica.wav" loop preload="auto"></audio>
+<script src="quiz-data.js"></script>
+<script src="app.js"></script>
+<script>
+document.getElementById('enterBtn').addEventListener('click', function(){
+  var intro = document.getElementById('intro');
+  var main = document.getElementById('main');
+  intro.classList.add('is-leaving');
+  setTimeout(function(){
+    intro.style.display='none';
+    main.removeAttribute('hidden');
+    requestAnimationFrame(function(){ main.classList.add('is-visible'); });
+  }, 700);
+});
+</script>
+</body>
+</html>
