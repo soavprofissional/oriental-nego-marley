@@ -42,8 +42,8 @@ img{max-width:100%;display:block}
  .intro__planet-wrap{will-change:transform,opacity;
   position:absolute;left:50%;top:45%;
   transform:translate(-50%,-50%);
-  width:min(70vw,380px);height:min(70vw,380px);
-  display:flex;align-items:center;justify-content:center;
+  width:min(70vw,380px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
   z-index:2;
   transition:transform 1.6s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
   will-change:transform,opacity;
@@ -52,7 +52,8 @@ img{max-width:100%;display:block}
   transform:translate(-50%,-50%) scale(4.2);
   opacity:0;
 }
-.planet{width:95%;height:95%;object-fit:contain;border-radius:50%;margin:30px auto 0 auto;animation:planetSpin 20s linear infinite;}
+.planet{width:min(70vw,380px);height:min(70vw,380px);object-fit:contain;border-radius:50%;animation:planetSpin 20s linear infinite;}
+@keyframes planetSpin{to{transform:rotate(360deg)}}
 .planet__base{
   position:absolute;inset:0;border-radius:50%;
   background:radial-gradient(circle at 35% 30%, #4f7cff 0%, #1b4fd9 35%, #0a1f5c 70%, #02061a 100%);
@@ -420,7 +421,8 @@ img{max-width:100%;display:block}
 .cookie.is-broken .cookie__paper{transform:translate(-50%,-50%) scaleY(1);opacity:1}
 .cookie__msg{font-size:13px;line-height:1.5;font-style:italic;margin:0}
 
-.intro__logo{width:min(60vw,320px);margin:5px auto 0 auto;display:block;filter:drop-shadow(0 0 20px rgba(212,175,55,.4))}
+.intro__logo{width:min(60vw,320px);margin:10px auto 0 auto;display:block;filter:drop-shadow(0 0 20px rgba(212,175,55,.4));animation:logoFloat 2s ease-in-out infinite}
+@keyframes logoFloat{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.08) translateY(-8px)}}
 .hero__logo{width:min(50vw,240px);margin-bottom:10px;filter:drop-shadow(0 0 30px rgba(212,175,55,.4))}
 
 /* ============ COMETS ============ */
