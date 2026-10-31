@@ -7,7 +7,8 @@
   --gold-soft:#f0d57a;
   --red:#e63946;
   --yellow:#ffd60a;
-  --text:#e8eaf2;
+  --baby-blue:#00bfff;
+  --text:#00bfff;
   --muted:#9aa3c0;
   --card:rgba(12,16,34,0.72);
 }
@@ -19,7 +20,8 @@ body{
   background:var(--bg);
   color:var(--text);
   overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
+  font-size:17px;
+  line-height:1.6;
 }
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 img{max-width:100%;display:block}
@@ -159,7 +161,16 @@ img{max-width:100%;display:block}
 .hero__tag{margin-top:6px;font-size:13px;color:var(--blue-soft)}
 
 .hero__globe{display:block;margin:0 auto;max-width:100%}
-.hero__logo{display:block;margin:0 auto;max-width:100%}
+.hero__logo{display:block;margin:0 auto;max-width:100%;animation:logoFloat 2s ease-in-out infinite}
+
+/* ============ HERO GALLERY ============ */
+.hero__gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px;width:min(92vw,720px)}
+.hero__gallery-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease;border:1px solid rgba(212,175,55,.2)}
+.imgviewer{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.imgviewer__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.9)}
+.imgviewer__img{max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:0 0 40px rgba(0,0,0,.6);position:relative;z-index:1}
+.imgviewer__close{position:absolute;top:16px;right:20px;font-size:28px;color:#fff;background:none;border:none;cursor:pointer;z-index:2}
+@media (max-width:600px){.hero__gallery{grid-template-columns:repeat(2,1fr)}}
 
 
 /* ============ GALLERY 999 ============ */
@@ -608,3 +619,22 @@ img{max-width:100%;display:block}
 .quiz__player-status{font-size:12px;color:var(--muted);letter-spacing:.15em}
 .quiz__volume{width:100%;accent-color:var(--gold)}
 .quiz__fail{text-align:center;padding:10px}
+
+/* ============ TEXT COLOR & ANIMATION ============ */
+body{color:var(--baby-blue)}
+p, h1, h2, h3, h4, h5, h6, span, li, a, label, .quiz__option, .quiz__title, .quiz__intro, .quiz__progress-label, .quiz__score-live, .quiz__feedback, .quiz__result-title, .quiz__result-msg, .quiz__reward-title, .quiz__reward-text, .quiz__player-status, .quiz__preview-link, .guide-card__status, .guide-card__text, .gallery999__title, .gallery999__intro, .omikuji__label, .omikuji__title, .omikuji__msg, .hero__kicker, .hero__artist, .hero__tag, .intro__kicker, .intro__subtitle {
+  color: var(--baby-blue);
+  animation: textFloat 3s ease-in-out infinite;
+}
+@keyframes textFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* ============ SCROLL JUSTIFICATION ============ */
+.scroll-just{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.scroll-just__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.7);backdrop-filter:blur(4px)}
+.scroll-just__card{position:relative;width:min(92vw,480px);background:linear-gradient(160deg,rgba(230,210,150,.95),rgba(200,180,120,.95));border:1px solid rgba(212,175,55,.6);border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 0 40px rgba(212,175,55,.3);animation:reveal .4s ease;color:#3a2a10}
+.scroll-just__status{font-size:16px;font-weight:800;letter-spacing:.15em;margin-bottom:10px}
+.scroll-just__status.is-correct{color:#1a8f4a}
+.scroll-just__status.is-wrong{color:#a61b2e}
+.scroll-just__text{font-size:14px;line-height:1.6;font-style:italic;margin-bottom:14px;color:#000}
+.scroll-just__bar{width:100%;height:6px;background:rgba(0,0,0,.15);border-radius:999px;overflow:hidden}
+.scroll-just__progress{height:100%;width:100%;background:linear-gradient(90deg,var(--gold),var(--blue-soft));transition:width .1s linear}

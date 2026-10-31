@@ -64,8 +64,20 @@
     <img class="hero__globe" src="assets/intro.png" alt="Globo">
     <p class="hero__kicker">ÁLBUM CONCEITUAL</p>
     <img class="hero__logo" src="assets/logo.png" alt="ORIENTAL">
-    <p class="hero__artist">NEGOMARLEY</p>
-    <p class="hero__tag">Experiência artística interativa</p>
+
+    <div class="hero__gallery">
+      <img src="assets/galeria/IMG_5371.jpg" alt="Galeria 1" class="hero__gallery-img">
+      <img src="assets/galeria/IMG_9527.jpg" alt="Galeria 2" class="hero__gallery-img">
+      <img src="assets/galeria/IMG_9562.jpg" alt="Galeria 3" class="hero__gallery-img">
+      <img src="assets/galeria/IMG_9579.jpg" alt="Galeria 4" class="hero__gallery-img">
+    </div>
+  </section>
+
+  <div class="imgviewer" id="imgViewer" hidden>
+    <div class="imgviewer__backdrop" id="imgViewerBackdrop"></div>
+    <img class="imgviewer__img" id="imgViewerImg" alt="">
+    <button class="imgviewer__close" id="imgViewerClose" type="button">✕</button>
+  </div>
   </section>
 
   
@@ -92,12 +104,21 @@
       <p class="quiz__score-live" id="quizScoreLive">Acertos: 0 | Erros: 0</p>
 
       <div class="quiz__question" id="quizQuestion"></div>
+      <div class="scroll-just" id="scrollJust" hidden>
+        <div class="scroll-just__backdrop" id="scrollJustBackdrop"></div>
+        <div class="scroll-just__card">
+          <p class="scroll-just__status" id="scrollJustStatus"></p>
+          <p class="scroll-just__text" id="scrollJustText"></p>
+          <div class="scroll-just__bar"><div class="scroll-just__progress" id="scrollJustProgress"></div></div>
+        </div>
+      </div>
       <div class="quiz__options" id="quizOptions"></div>
 
       <div class="quiz__feedback" id="quizFeedback" hidden></div>
 
       <div class="quiz__actions">
         <button class="btn btn--primary" id="quizNext" type="button" hidden>Próxima</button>
+        <button class="btn btn--ghost" id="quizRestartAlways" type="button">Tente novamente</button>
         <button class="btn btn--ghost" id="quizRestart" type="button" hidden>Refazer quiz</button>
       </div>
 
@@ -115,11 +136,11 @@
             <input type="range" id="quizVolume" min="0" max="1" step="0.01" value="1" class="quiz__volume">
           </div>
           <p class="quiz__preview-link" id="quizPreviewLink" style="margin-top:12px;font-size:13px;color:var(--muted);">Prévia exclusiva: link a ser configurado.</p>
+          <button class="btn btn--primary" id="quizAccessGuide" type="button" style="margin-top:12px;">ACESSAR GUIA EXCLUSIVA</button>
         </div>
         <div class="quiz__fail" id="quizFail" hidden>
           <p class="quiz__score" id="quizScore"></p>
           <p class="quiz__result-msg" id="quizResultMsg"></p>
-          <button class="btn btn--ghost" id="quizRestart" type="button">Refazer quiz</button>
         </div>
       </div>
       </div>
@@ -134,7 +155,16 @@
       </button>
       <p class="guide-card__status" id="guideStatus">Bloqueado — acerte todas as perguntas.</p>
       <div class="guide-card__player" id="guidePlayer" hidden>
-        <audio id="guideAudio" src="assets/amarelice.mp3" preload="metadata"></audio>
+        <video  
+          id="guideAudio"
+          src="assets/guia-final.mp4"
+          preload="metadata"
+          controls
+          playsinline
+          style="width:100%;max-width:100%;border-radius:12px;"
+        >
+          Seu navegador não conseguiu reproduzir este vídeo.
+        </video>
         <div class="guide-card__controls">
           <button class="btn btn--primary" id="guidePlay" type="button">▶ Play</button>
           <button class="btn btn--ghost" id="guidePause" type="button" hidden>⏸ Pause</button>
@@ -144,10 +174,6 @@
       </div>
     </div>
   </section>
-  <footer class="footer">
-    <p>ORIENTAL — NEGO MARLEY · Experiência artística</p>
-  </footer>
-</main>
 
 
 <!-- OMIKUJI MODAL -->

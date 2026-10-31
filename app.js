@@ -52,6 +52,7 @@
   // ---------- Sound (music loop) ----------
   const bgMusic = document.getElementById('bgMusic');
   let soundOn = false;
+  let soundWasOn = false;
   function toggleSound(){
     if(!bgMusic) return;
     if(!soundOn){
@@ -99,7 +100,8 @@
     requestAnimationFrame(() => main.classList.add('is-visible'));
     // cleanup after transition
     setTimeout(() => { intro.setAttribute('aria-hidden','true'); }, 1000);
-    if(soundOn){ try{ bgMusic.pause(); }catch(e){} soundOn=false; soundBtn.textContent='Som: desligado'; }
+    // keep music playing, update main sound button state
+    if(mainSoundBtn) mainSoundBtn.textContent = soundOn ? 'Som: ligado' : 'Som: desligado';
   }
 
   function runIntro(){
@@ -134,7 +136,7 @@ const quizQuestion = document.getElementById('quizQuestion');
 const quizOptions = document.getElementById('quizOptions');
 const quizFeedback = document.getElementById('quizFeedback');
 const quizNext = document.getElementById('quizNext');
-const quizRestart = document.getElementById('quizRestart');
+const quizRestartAlways = document.getElementById('quizRestartAlways');
 const quizResult = document.getElementById('quizResult');
 const quizScore = document.getElementById('quizScore');
 const quizResultMsg = document.getElementById('quizResultMsg');
@@ -149,6 +151,7 @@ const quizPlayBtn = document.getElementById('quizPlayBtn');
 const quizPauseBtn = document.getElementById('quizPauseBtn');
 const quizVolume = document.getElementById('quizVolume');
 const quizPlayerStatus = document.getElementById('quizPlayerStatus');
+const quizAccessGuide = document.getElementById('quizAccessGuide');
 
 const guideCard = document.getElementById('guideCard');
 const guidePlayBtn = document.getElementById('guidePlayBtn');
@@ -213,18 +216,40 @@ function selectAnswer(i, btn){
   }
   if(quizNext) quizNext.hidden = true;
   if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${qIndex + 1 - qScore}`;
-  // auto-advance to next question
+  // show scroll justification
+  showScrollJust(correct, q.justificativa || '');
+}
+
+function showScrollJust(correct, text){
+  const scroll = document.getElementById('scrollJust');
+  const status = document.getElementById('scrollJustStatus');
+  const txt = document.getElementById('scrollJustText');
+  const bar = document.getElementById('scrollJustProgress');
+  const backdrop = document.getElementById('scrollJustBackdrop');
+  if(status){ status.textContent = correct ? 'CORRETO' : 'ERRADO'; status.className = 'scroll-just__status ' + (correct ? 'is-correct' : 'is-wrong'); }
+  if(txt) txt.textContent = text;
+  if(bar) bar.style.width = '100%';
+  scroll.hidden = false;
   if(qTimer) clearTimeout(qTimer);
-  qTimer = setTimeout(() => {
-    qIndex++;
-    if(quizQuestion) quizQuestion.parentElement.style.display = '';
-    if(quizOptions) quizOptions.style.display = '';
-    if(qIndex >= QUIZ_DATA.length){
-      showResult();
-    } else {
-      renderQuestion();
+  let remaining = 8;
+  const tick = setInterval(() => {
+    remaining -= 0.1;
+    if(bar) bar.style.width = (remaining / 8 * 100) + '%';
+    if(remaining <= 0){
+      clearInterval(tick);
+      scroll.hidden = true;
+      // advance
+      qIndex++;
+      if(quizQuestion) quizQuestion.parentElement.style.display = '';
+      if(quizOptions) quizOptions.style.display = '';
+      if(qIndex >= QUIZ_DATA.length){
+        showResult();
+      } else {
+        renderQuestion();
+      }
     }
-  }, 1500);
+  }, 100);
+  if(backdrop) backdrop.onclick = () => {};
 }
 
 function showResult(){
@@ -244,36 +269,26 @@ function showResult(){
     if(quizResultMsg) quizResultMsg.textContent = '';
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     if(quizPlayerStatus) quizPlayerStatus.textContent = 'Pronto';
-    // desbloquear guide card
     unlockGuide();
+    if(quizAccessGuide){
+      quizAccessGuide.hidden = false;
+      quizAccessGuide.addEventListener('click', () => {
+        const gc = document.getElementById('guideCard');
+        if(gc) gc.scrollIntoView({behavior:'smooth'});
+        if(guidePlayBtn && !guidePlayBtn.disabled){
+          if(guidePlayer) guidePlayer.hidden = false;
+        }
+      });
+    }
   } else {
     if(quizReward) quizReward.hidden = true;
     if(quizFail) quizFail.hidden = false;
-    if(quizResultMsg) quizResultMsg.textContent = 'Você não acertou todas as 15 perguntas. É necessário acertar todas para desbloquear a prévia exclusiva.';
-    if(quizRestart) quizRestart.hidden = false;
+    if(quizResultMsg) quizResultMsg.textContent = 'Infelizmente, você não acertou todas as perguntas. Tente novamente para liberar a guia exclusiva do Oriental.';
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     lockGuide();
   }
 }
 
-if(quizRestart){
-  quizRestart.addEventListener('click', () => {
-    if(qTimer) clearTimeout(qTimer);
-    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
-    if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
-    qIndex = 0; qScore = 0; qAnswered = false;
-    if(quizResult) quizResult.hidden = true;
-    if(quizReward) quizReward.hidden = true;
-    if(quizFail) quizFail.hidden = true;
-    if(quizQuestion) quizQuestion.parentElement.style.display = '';
-    if(quizOptions) quizOptions.style.display = '';
-    if(quizRestart) quizRestart.hidden = true;
-    if(quizVideoWrap) quizVideoWrap.hidden = true;
-    if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
-    lockGuide();
-    renderQuestion();
-  });
-}
 if(quizNext){
   quizNext.addEventListener('click', () => {
     qIndex++;
@@ -296,6 +311,23 @@ function lockGuide(){
   if(guidePlay) guidePlay.hidden = false;
   if(guidePause) guidePause.hidden = true;
   if(guidePlayerStatus) guidePlayerStatus.textContent = 'Pronto';
+}
+
+if(quizRestartAlways){
+  quizRestartAlways.addEventListener('click', () => {
+    if(qTimer) clearTimeout(qTimer);
+    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
+    if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
+    qIndex = 0; qScore = 0; qAnswered = false;
+    if(quizResult) quizResult.hidden = true;
+    if(quizReward) quizReward.hidden = true;
+    if(quizFail) quizFail.hidden = true;
+    if(quizQuestion) quizQuestion.parentElement.style.display = '';
+    if(quizOptions) quizOptions.style.display = '';
+    if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
+    lockGuide();
+    renderQuestion();
+  });
 }
 
 // guide card player
@@ -332,39 +364,49 @@ if(guideAudio){
     if(guidePlayerStatus) guidePlayerStatus.textContent = 'Concluído';
   });
 }
-if(guidePlayBtn){
-  guidePlayBtn.addEventListener('click', () => {
-    if(!guidePlayBtn.disabled){
-      if(guidePlayer) guidePlayer.hidden = false;
-      if(guideAudio){ guideAudio.play().catch(()=>{}); }
-      if(guidePlay) guidePlay.hidden = true;
-      if(guidePause) guidePause.hidden = false;
-      if(guidePlayerStatus) guidePlayerStatus.textContent = 'Tocando';
+if (guidePlayBtn) {
+  guidePlayBtn.addEventListener('click', async () => {
+    if (guidePlayBtn.disabled) return;
+
+    if (bgMusic && !bgMusic.paused) {
+      bgMusic.pause();
+      soundOn = false;
+
+      if (soundBtn) {
+        soundBtn.textContent = 'Som: desligado';
+        soundBtn.setAttribute('aria-pressed', 'false');
+      }
+
+      if (mainSoundBtn) {
+        mainSoundBtn.textContent = 'Som: desligado';
+      }
+    }
+
+    if (guidePlayer) {
+      guidePlayer.hidden = false;
+    }
+
+    if (guideAudio) {
+      try {
+        await guideAudio.play();
+
+        if (guidePlay) guidePlay.hidden = true;
+        if (guidePause) guidePause.hidden = false;
+
+        if (guidePlayerStatus) {
+          guidePlayerStatus.textContent = 'Tocando';
+        }
+      } catch (error) {
+        if (guidePlayerStatus) {
+          guidePlayerStatus.textContent = 'Toque em Play para reproduzir';
+        }
+      }
     }
   });
 }
-
 // init locked
 lockGuide();
 
-if(quizRestart){
-  quizRestart.addEventListener('click', () => {
-    if(qTimer) clearTimeout(qTimer);
-    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
-    if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
-    qIndex = 0; qScore = 0; qAnswered = false;
-    if(quizResult) quizResult.hidden = true;
-    if(quizReward) quizReward.hidden = true;
-    if(quizFail) quizFail.hidden = true;
-    if(quizQuestion) quizQuestion.parentElement.style.display = '';
-    if(quizOptions) quizOptions.style.display = '';
-    if(quizRestart) quizRestart.hidden = true;
-    if(quizVideoWrap) quizVideoWrap.hidden = true;
-    if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
-    lockGuide();
-    renderQuestion();
-  });
-}
 
 if(quizPlayBtn){
   quizPlayBtn.addEventListener('click', () => {
@@ -459,6 +501,23 @@ if(omikujiBackdrop) omikujiBackdrop.addEventListener('click', closeOmikuji);
 if(omikujiBreak) omikujiBreak.addEventListener('click', breakCookie);
 if(omikujiAgain) omikujiAgain.addEventListener('click', () => { resetCookie(); setTimeout(breakCookie, 100); });
 
+
+  // ---------- Hero gallery viewer ----------
+  const imgViewer = document.getElementById('imgViewer');
+  const imgViewerBackdrop = document.getElementById('imgViewerBackdrop');
+  const imgViewerImg = document.getElementById('imgViewerImg');
+  const imgViewerClose = document.getElementById('imgViewerClose');
+  function openImgViewer(src){
+    if(!imgViewer || !imgViewerImg) return;
+    imgViewerImg.src = src;
+    imgViewer.hidden = false;
+  }
+  function closeImgViewer(){ if(imgViewer) imgViewer.hidden = true; }
+  if(imgViewerBackdrop) imgViewerBackdrop.addEventListener('click', closeImgViewer);
+  if(imgViewerClose) imgViewerClose.addEventListener('click', closeImgViewer);
+  document.querySelectorAll('.hero__gallery-img').forEach(img => {
+    img.addEventListener('click', () => openImgViewer(img.src));
+  });
 
   window.finishIntro = finishIntro;
 })();
