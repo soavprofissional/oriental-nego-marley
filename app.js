@@ -283,9 +283,21 @@ function showResult(){
   } else {
     if(quizReward) quizReward.hidden = true;
     if(quizFail) quizFail.hidden = false;
-    if(quizResultMsg) quizResultMsg.textContent = 'Infelizmente, você não acertou todas as perguntas. Tente novamente para liberar a guia exclusiva do Oriental.';
+    if(quizResultMsg) quizResultMsg.textContent = 'INFELIZMENTE VOCE NÃO ACERTOU TODAS PERGUNTAS DO QUIZ TENTE NOVAMENTE PARA OUVIR A GUIA EXCLUSIVA';
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     lockGuide();
+    // reiniciar após 10 segundos
+    setTimeout(() => {
+      qIndex = 0; qScore = 0; qAnswered = false;
+      if(quizResult) quizResult.hidden = true;
+      if(quizReward) quizReward.hidden = true;
+      if(quizFail) quizFail.hidden = true;
+      if(quizQuestion) quizQuestion.parentElement.style.display = '';
+      if(quizOptions) quizOptions.style.display = '';
+      if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
+      lockGuide();
+      renderQuestion();
+    }, 10000);
   }
 }
 
