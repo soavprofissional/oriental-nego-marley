@@ -543,7 +543,9 @@ img{max-width:100%;display:block}
 .quiz__question.is-entering{animation:fadeInUp .35s ease}
 .quiz__options{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .quiz__option{padding:12px 16px;border-radius:12px;border:1px solid rgba(212,175,55,.4);background:rgba(10,12,30,.85);color:#fff;text-align:left;cursor:pointer;transition:background .2s,transform .15s;font-weight:600}
-.quiz__option:hover{background:rgba(255,255,255,.12);transform:translateY(-2px);box-shadow:0 0 12px rgba(212,175,55,.2)}
+@media (hover: hover) and (pointer: fine) {
+  .quiz__option:hover{background:rgba(255,255,255,.12);transform:translateY(-2px);box-shadow:0 0 12px rgba(212,175,55,.2)}
+}
 .quiz__option.is-correct{background:linear-gradient(135deg,rgba(46,204,113,.25),rgba(26,143,74,.25));border-color:#2ecc71;animation:pulseCorrect .4s ease}
 .quiz__option.is-wrong{background:linear-gradient(135deg,rgba(230,57,70,.25),rgba(166,27,46,.25));border-color:#e63946;animation:shake .4s ease}
 .quiz__option:disabled{cursor:default;opacity:.85}

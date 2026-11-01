@@ -179,6 +179,7 @@ function updateProgress(){
 }
 
 function renderQuestion(){
+  if(document.activeElement) document.activeElement.blur();
   if(!QUIZ_DATA || qIndex >= QUIZ_DATA.length){ showResult(); return; }
   const q = QUIZ_DATA[qIndex];
   qAnswered = false;
@@ -215,6 +216,7 @@ function selectAnswer(i, btn){
     quizFeedback.textContent = correct ? 'Correto!' : 'Errado. A resposta correta foi destacada.';
     quizFeedback.className = 'quiz__feedback ' + (correct ? 'is-correct' : 'is-wrong');
   }
+  if(btn) btn.blur();
   if(quizNext) quizNext.hidden = true;
   if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${qIndex + 1 - qScore}`;
   // show scroll justification
