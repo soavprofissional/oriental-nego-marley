@@ -349,7 +349,6 @@ if(quizRestart){
     resetQuizToStart();
   });
 }
-}
 
 // guide card player
 if(guidePlay){
