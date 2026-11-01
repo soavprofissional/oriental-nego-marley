@@ -357,7 +357,7 @@ if(guidePlay){
   guidePlay.addEventListener('click', () => {
     if(guideAudio){
       if(bgMusic && !bgMusic.paused){ bgMusic.pause(); soundOn = false; if(soundBtn) soundBtn.textContent = 'Som: desligado'; if(soundBtn) soundBtn.setAttribute('aria-pressed','false'); if(mainSoundBtn) mainSoundBtn.textContent = 'Som: desligado'; }
-      guideAudio.muted = false;
+      guideAudio.muted = true;
       guideAudio.volume = parseFloat(guideVolume && guideVolume.value) || 1;
       guideAudio.play().catch(()=>{});
       if(guidePlay) guidePlay.hidden = true;
@@ -400,7 +400,16 @@ if(guideAudio && guideAudioTrack){
   };
   const syncPause = () => { guideAudioTrack.pause(); };
   const syncSeek = () => { try { guideAudioTrack.currentTime = guideAudio.currentTime; } catch(e){} };
-  const syncVolume = () => { guideAudioTrack.volume = guideAudio.volume; };
+  let syncingVolume = false;
+  const syncVolume = () => {
+    if (syncingVolume) return;
+    syncingVolume = true;
+    const vol = guideAudio.volume;
+    guideAudio.muted = true;
+    guideAudioTrack.volume = vol;
+    guideAudioTrack.muted = false;
+    syncingVolume = false;
+  };
   guideAudio.addEventListener('play', syncPlay);
   guideAudio.addEventListener('pause', syncPause);
   guideAudio.addEventListener('seeking', syncSeek);
@@ -432,7 +441,7 @@ if (guidePlayBtn) {
     }
 
     if (guideAudio) {
-      guideAudio.muted = false;
+      guideAudio.muted = true;
       guideAudio.volume = parseFloat(guideVolume && guideVolume.value) || 1;
       try {
         await guideAudio.play();
@@ -453,7 +462,7 @@ if (guidePlayBtn) {
 }
 // init locked
 lockGuide();
-if(guideAudio){ guideAudio.muted = false; guideAudio.volume = 1; }
+if(guideAudio){ guideAudio.muted = true; guideAudio.volume = 1; }
 
 
 if(quizPlayBtn){
