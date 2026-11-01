@@ -631,10 +631,24 @@ p, h1, h2, h3, h4, h5, h6, span, li, a, label, .quiz__option, .quiz__title, .qui
 /* ============ SCROLL JUSTIFICATION ============ */
 .scroll-just{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
 .scroll-just__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.7);backdrop-filter:blur(4px)}
-.scroll-just__card{position:relative;width:min(92vw,480px);background:linear-gradient(160deg,rgba(230,210,150,.95),rgba(200,180,120,.95));border:1px solid rgba(212,175,55,.6);border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 0 40px rgba(212,175,55,.3);animation:reveal .4s ease;color:#3a2a10}
+.scroll-just__card{position:relative;width:min(92vw,480px);background-color:#e8d8a8;background:linear-gradient(160deg,rgba(230,210,150,.95),rgba(200,180,120,.95));border:1px solid rgba(212,175,55,.6);border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 0 40px rgba(212,175,55,.3);animation:reveal .4s ease;color:#3a2a10}
 .scroll-just__status{font-size:16px;font-weight:800;letter-spacing:.15em;margin-bottom:10px}
 .scroll-just__status.is-correct{color:#1a8f4a}
 .scroll-just__status.is-wrong{color:#a61b2e}
 .scroll-just__text{font-size:14px;line-height:1.6;font-style:italic;margin-bottom:14px;color:#3a2a10}
 .scroll-just__bar{width:100%;height:6px;background:rgba(0,0,0,.15);border-radius:999px;overflow:hidden}
 .scroll-just__progress{height:100%;width:100%;background:linear-gradient(90deg,var(--gold),var(--blue-soft));transition:width .1s linear}
+
+@media (max-width:600px){
+  .scroll-just{padding:16px}
+  .scroll-just__card{
+    width:min(88vw,420px);
+    max-height:68vh;
+    overflow:auto;
+    padding:20px 16px;
+    background:linear-gradient(160deg,rgba(230,210,150,.98),rgba(205,186,124,.98));
+    box-shadow:0 0 24px rgba(212,175,55,.24);
+  }
+  .scroll-just__status{font-size:15px;letter-spacing:.12em}
+  .scroll-just__text{font-size:13px;line-height:1.5;margin-bottom:12px}
+}

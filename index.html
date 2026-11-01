@@ -103,7 +103,7 @@
       <p class="quiz__progress-label" id="quizProgressLabel">Pergunta 1 de 15</p>
       <p class="quiz__score-live" id="quizScoreLive">Acertos: 0 | Erros: 0</p>
 
-      <div class="quiz__question" id="quizQuestion"></div>
+      <div class="quiz__question" id="quizQuestion" hidden></div>
       <div class="scroll-just" id="scrollJust" hidden>
         <div class="scroll-just__backdrop" id="scrollJustBackdrop"></div>
         <div class="scroll-just__card">
@@ -112,7 +112,7 @@
           <div class="scroll-just__bar"><div class="scroll-just__progress" id="scrollJustProgress"></div></div>
         </div>
       </div>
-      <div class="quiz__options" id="quizOptions"></div>
+      <div class="quiz__options" id="quizOptions" hidden></div>
 
       <div class="quiz__feedback" id="quizFeedback" hidden></div>
 
@@ -122,7 +122,7 @@
         <button class="btn btn--ghost" id="quizRestart" type="button" hidden>Refazer quiz</button>
       </div>
 
-      <div class="quiz__result" id="quizResult" hidden>
+      <div class="quiz__result" id="quizResult">
         <div class="quiz__reward" id="quizReward" hidden>
           <h3 class="quiz__reward-title">VOCÊ CHEGOU À PRÉVIA EXCLUSIVA</h3>
           <p class="quiz__reward-text">“Você concluiu o desafio ORIENTAL e desbloqueou sua recompensa exclusiva.”</p>
@@ -138,9 +138,9 @@
           <p class="quiz__preview-link" id="quizPreviewLink" style="margin-top:12px;font-size:13px;color:var(--muted);">Prévia exclusiva: link a ser configurado.</p>
           <button class="btn btn--primary" id="quizAccessGuide" type="button" style="margin-top:12px;">ACESSAR GUIA EXCLUSIVA</button>
         </div>
-        <div class="quiz__fail" id="quizFail" hidden>
-          <p class="quiz__score" id="quizScore"></p>
-          <p class="quiz__result-msg" id="quizResultMsg"></p>
+        <div class="quiz__fail" id="quizFail">
+          <p class="quiz__score" id="quizScore">12 / 15</p>
+          <p class="quiz__result-msg" id="quizResultMsg">INFELIZMENTE VOCE NÃO ACERTOU TODAS PERGUNTAS DO QUIZ TENTE NOVAMENTE PARA OUVIR A GUIA EXCLUSIVA</p>
         </div>
       </div>
       </div>

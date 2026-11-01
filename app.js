@@ -252,6 +252,23 @@ function showScrollJust(correct, text){
   if(backdrop) backdrop.onclick = () => {};
 }
 
+function resetQuizToStart(){
+  if(qTimer) clearTimeout(qTimer);
+  qIndex = 0;
+  qScore = 0;
+  qAnswered = false;
+  if(quizResult) quizResult.hidden = true;
+  if(quizReward) quizReward.hidden = true;
+  if(quizFail) quizFail.hidden = true;
+  if(quizQuestion) quizQuestion.parentElement.style.display = '';
+  if(quizOptions) quizOptions.style.display = '';
+  if(quizProgressBar) quizProgressBar.style.width = '0%';
+  if(quizProgressLabel) quizProgressLabel.textContent = `Pergunta 1 de ${QUIZ_DATA.length}`;
+  if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
+  lockGuide();
+  renderQuestion();
+}
+
 function showResult(){
   if(quizQuestion) quizQuestion.parentElement.style.display = 'none';
   if(quizOptions) quizOptions.style.display = 'none';
@@ -260,7 +277,6 @@ function showResult(){
   if(quizProgressBar) quizProgressBar.style.width = '100%';
   if(quizResult){ quizResult.hidden = false; }
   const total = QUIZ_DATA.length;
-  const pct = qScore / total;
   if(quizScore) quizScore.textContent = `${qScore} / ${total}`;
   if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${total - qScore}`;
   if(qScore === total){
@@ -283,21 +299,9 @@ function showResult(){
   } else {
     if(quizReward) quizReward.hidden = true;
     if(quizFail) quizFail.hidden = false;
-    if(quizResultMsg) quizResultMsg.textContent = 'INFELIZMENTE VOCE NÃO ACERTOU TODAS PERGUNTAS DO QUIZ TENTE NOVAMENTE PARA OUVIR A GUIA EXCLUSIVA';
+    if(quizResultMsg) quizResultMsg.textContent = 'INFELIZMENTE VOCÊ NÃO ACERTOU TODAS PERGUNTAS DO QUIZ TENTE NOVAMENTE PARA OUVIR A GUIA EXCLUSIVA';
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     lockGuide();
-    // reiniciar após 10 segundos
-    setTimeout(() => {
-      qIndex = 0; qScore = 0; qAnswered = false;
-      if(quizResult) quizResult.hidden = true;
-      if(quizReward) quizReward.hidden = true;
-      if(quizFail) quizFail.hidden = true;
-      if(quizQuestion) quizQuestion.parentElement.style.display = '';
-      if(quizOptions) quizOptions.style.display = '';
-      if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
-      lockGuide();
-      renderQuestion();
-    }, 10000);
   }
 }
 
@@ -327,18 +331,9 @@ function lockGuide(){
 
 if(quizRestartAlways){
   quizRestartAlways.addEventListener('click', () => {
-    if(qTimer) clearTimeout(qTimer);
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
-    qIndex = 0; qScore = 0; qAnswered = false;
-    if(quizResult) quizResult.hidden = true;
-    if(quizReward) quizReward.hidden = true;
-    if(quizFail) quizFail.hidden = true;
-    if(quizQuestion) quizQuestion.parentElement.style.display = '';
-    if(quizOptions) quizOptions.style.display = '';
-    if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
-    lockGuide();
-    renderQuestion();
+    resetQuizToStart();
   });
 }
 
