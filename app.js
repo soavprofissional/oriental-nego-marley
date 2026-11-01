@@ -137,6 +137,7 @@ const quizOptions = document.getElementById('quizOptions');
 const quizFeedback = document.getElementById('quizFeedback');
 const quizNext = document.getElementById('quizNext');
 const quizRestartAlways = document.getElementById('quizRestartAlways');
+const quizRestart = document.getElementById('quizRestart');
 const quizResult = document.getElementById('quizResult');
 const quizScore = document.getElementById('quizScore');
 const quizResultMsg = document.getElementById('quizResultMsg');
@@ -260,6 +261,7 @@ function resetQuizToStart(){
   if(quizResult) quizResult.hidden = true;
   if(quizReward) quizReward.hidden = true;
   if(quizFail) quizFail.hidden = true;
+  if(quizRestart) quizRestart.hidden = true;
       if(quizQuestion) quizQuestion.style.display = '';
       if(quizOptions) quizOptions.style.display = '';
   if(quizProgressBar) quizProgressBar.style.width = '0%';
@@ -299,7 +301,8 @@ function showResult(){
   } else {
     if(quizReward) quizReward.hidden = true;
     if(quizFail) quizFail.hidden = false;
-    if(quizResultMsg) quizResultMsg.textContent = 'INFELIZMENTE VOCÊ NÃO ACERTOU TODAS PERGUNTAS DO QUIZ TENTE NOVAMENTE PARA OUVIR A GUIA EXCLUSIVA';
+    if(quizResultMsg) quizResultMsg.textContent = 'Infelizmente você não acertou todas as perguntas do quiz. Tente novamente para ouvir a guia exclusiva.';
+    if(quizRestart) quizRestart.hidden = false;
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     lockGuide();
   }
@@ -337,6 +340,15 @@ if(quizRestartAlways){
   if(guideAudioTrack){ guideAudioTrack.pause(); guideAudioTrack.currentTime = 0; }
     resetQuizToStart();
   });
+}
+if(quizRestart){
+  quizRestart.addEventListener('click', () => {
+    if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
+    if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
+    if(guideAudioTrack){ guideAudioTrack.pause(); guideAudioTrack.currentTime = 0; }
+    resetQuizToStart();
+  });
+}
 }
 
 // guide card player
@@ -380,13 +392,14 @@ if(guideAudio){
 if(guideAudio && guideAudioTrack){
   guideAudio.muted = true; // avoid unplayable/double AAC audio
   guideAudioTrack.volume = parseFloat(guideVolume && guideVolume.value) || 1;
+  guideAudioTrack.muted = false;
   const syncPlay = () => {
     try { guideAudioTrack.currentTime = guideAudio.currentTime; } catch(e){}
     guideAudioTrack.play().catch(()=>{});
   };
   const syncPause = () => { guideAudioTrack.pause(); };
   const syncSeek = () => { try { guideAudioTrack.currentTime = guideAudio.currentTime; } catch(e){} };
-  const syncVolume = () => { guideAudioTrack.volume = guideAudio.volume; guideAudioTrack.muted = guideAudio.muted; };
+  const syncVolume = () => { guideAudioTrack.volume = guideAudio.volume; };
   guideAudio.addEventListener('play', syncPlay);
   guideAudio.addEventListener('pause', syncPause);
   guideAudio.addEventListener('seeking', syncSeek);
