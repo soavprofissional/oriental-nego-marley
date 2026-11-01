@@ -103,7 +103,7 @@
       <p class="quiz__progress-label" id="quizProgressLabel">Pergunta 1 de 15</p>
       <p class="quiz__score-live" id="quizScoreLive">Acertos: 0 | Erros: 0</p>
 
-      <div class="quiz__question" id="quizQuestion" hidden></div>
+      <div class="quiz__question" id="quizQuestion"></div>
       <div class="scroll-just" id="scrollJust" hidden>
         <div class="scroll-just__backdrop" id="scrollJustBackdrop"></div>
         <div class="scroll-just__card">
@@ -112,7 +112,7 @@
           <div class="scroll-just__bar"><div class="scroll-just__progress" id="scrollJustProgress"></div></div>
         </div>
       </div>
-      <div class="quiz__options" id="quizOptions" hidden></div>
+      <div class="quiz__options" id="quizOptions"></div>
 
       <div class="quiz__feedback" id="quizFeedback" hidden></div>
 
@@ -122,20 +122,10 @@
         <button class="btn btn--ghost" id="quizRestart" type="button" hidden>Refazer quiz</button>
       </div>
 
-      <div class="quiz__result" id="quizResult">
+      <div class="quiz__result" id="quizResult" hidden>
         <div class="quiz__reward" id="quizReward" hidden>
           <h3 class="quiz__reward-title">VOCÊ CHEGOU À PRÉVIA EXCLUSIVA</h3>
           <p class="quiz__reward-text">“Você concluiu o desafio ORIENTAL e desbloqueou sua recompensa exclusiva.”</p>
-          <div class="quiz__player">
-            <audio id="quizAudio" src="assets/amarelice.mp3" preload="metadata"></audio>
-            <div class="quiz__player-controls">
-              <button class="btn btn--primary" id="quizPlayBtn" type="button">▶ Reproduzir</button>
-              <button class="btn btn--ghost" id="quizPauseBtn" type="button" hidden>⏸ Pausar</button>
-              <span class="quiz__player-status" id="quizPlayerStatus">Pronto</span>
-            </div>
-            <input type="range" id="quizVolume" min="0" max="1" step="0.01" value="1" class="quiz__volume">
-          </div>
-          <p class="quiz__preview-link" id="quizPreviewLink" style="margin-top:12px;font-size:13px;color:var(--muted);">Prévia exclusiva: link a ser configurado.</p>
           <button class="btn btn--primary" id="quizAccessGuide" type="button" style="margin-top:12px;">ACESSAR GUIA EXCLUSIVA</button>
         </div>
         <div class="quiz__fail" id="quizFail">
@@ -158,13 +148,14 @@
         <video  
           id="guideAudio"
           src="assets/guia-final.mp4"
-          preload="metadata"
+          preload="auto"
           controls
           playsinline
           style="width:100%;max-width:100%;border-radius:12px;"
         >
           Seu navegador não conseguiu reproduzir este vídeo.
         </video>
+        <audio id="guideAudioTrack" src="assets/amarelice.mp3" preload="auto" hidden></audio>
         <div class="guide-card__controls">
           <button class="btn btn--primary" id="guidePlay" type="button">▶ Play</button>
           <button class="btn btn--ghost" id="guidePause" type="button" hidden>⏸ Pause</button>

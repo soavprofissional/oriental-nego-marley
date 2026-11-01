@@ -158,6 +158,7 @@ const guidePlayBtn = document.getElementById('guidePlayBtn');
 const guideStatus = document.getElementById('guideStatus');
 const guidePlayer = document.getElementById('guidePlayer');
 const guideAudio = document.getElementById('guideAudio');
+const guideAudioTrack = document.getElementById('guideAudioTrack');
 const guidePlay = document.getElementById('guidePlay');
 const guidePause = document.getElementById('guidePause');
 const guideVolume = document.getElementById('guideVolume');
@@ -180,9 +181,8 @@ function renderQuestion(){
   if(!QUIZ_DATA || qIndex >= QUIZ_DATA.length){ showResult(); return; }
   const q = QUIZ_DATA[qIndex];
   qAnswered = false;
-  if(quizQuestion){ quizQuestion.classList.remove('is-entering'); void quizQuestion.offsetWidth; quizQuestion.classList.add('is-entering'); quizQuestion.textContent = q.pergunta; }
-  if(quizOptions){
-    quizOptions.innerHTML = '';
+  if(quizQuestion){ quizQuestion.style.display = ''; quizQuestion.classList.remove('is-entering'); void quizQuestion.offsetWidth; quizQuestion.classList.add('is-entering'); quizQuestion.textContent = q.pergunta; }
+  if(quizOptions){ quizOptions.style.display = ''; quizOptions.innerHTML = '';
     q.alternativas.forEach((alt, i) => {
       const btn = document.createElement('button');
       btn.className = 'quiz__option';
@@ -240,7 +240,7 @@ function showScrollJust(correct, text){
       scroll.hidden = true;
       // advance
       qIndex++;
-      if(quizQuestion) quizQuestion.parentElement.style.display = '';
+      if(quizQuestion) quizQuestion.style.display = '';
       if(quizOptions) quizOptions.style.display = '';
       if(qIndex >= QUIZ_DATA.length){
         showResult();
@@ -260,8 +260,8 @@ function resetQuizToStart(){
   if(quizResult) quizResult.hidden = true;
   if(quizReward) quizReward.hidden = true;
   if(quizFail) quizFail.hidden = true;
-  if(quizQuestion) quizQuestion.parentElement.style.display = '';
-  if(quizOptions) quizOptions.style.display = '';
+      if(quizQuestion) quizQuestion.style.display = '';
+      if(quizOptions) quizOptions.style.display = '';
   if(quizProgressBar) quizProgressBar.style.width = '0%';
   if(quizProgressLabel) quizProgressLabel.textContent = `Pergunta 1 de ${QUIZ_DATA.length}`;
   if(quizScoreLive) quizScoreLive.textContent = 'Acertos: 0 | Erros: 0';
@@ -270,7 +270,7 @@ function resetQuizToStart(){
 }
 
 function showResult(){
-  if(quizQuestion) quizQuestion.parentElement.style.display = 'none';
+  if(quizQuestion) quizQuestion.style.display = 'none';
   if(quizOptions) quizOptions.style.display = 'none';
   if(quizNext) quizNext.hidden = true;
   if(quizProgressLabel) quizProgressLabel.textContent = 'Concluído';
@@ -309,7 +309,7 @@ if(quizNext){
   quizNext.addEventListener('click', () => {
     qIndex++;
     // restore question UI
-    if(quizQuestion) quizQuestion.parentElement.style.display = '';
+    if(quizQuestion) quizQuestion.style.display = '';
     if(quizOptions) quizOptions.style.display = '';
     renderQuestion();
   });
@@ -324,6 +324,7 @@ function lockGuide(){
   if(guideStatus) guideStatus.textContent = 'Bloqueado — acerte todas as perguntas.';
   if(guidePlayer) guidePlayer.hidden = true;
   if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
+  if(guideAudioTrack){ guideAudioTrack.pause(); guideAudioTrack.currentTime = 0; }
   if(guidePlay) guidePlay.hidden = false;
   if(guidePause) guidePause.hidden = true;
   if(guidePlayerStatus) guidePlayerStatus.textContent = 'Pronto';
@@ -333,6 +334,7 @@ if(quizRestartAlways){
   quizRestartAlways.addEventListener('click', () => {
     if(quizAudio){ quizAudio.pause(); quizAudio.currentTime = 0; }
     if(guideAudio){ guideAudio.pause(); guideAudio.currentTime = 0; }
+  if(guideAudioTrack){ guideAudioTrack.pause(); guideAudioTrack.currentTime = 0; }
     resetQuizToStart();
   });
 }
@@ -342,6 +344,8 @@ if(guidePlay){
   guidePlay.addEventListener('click', () => {
     if(guideAudio){
       if(bgMusic && !bgMusic.paused){ bgMusic.pause(); soundOn = false; if(soundBtn) soundBtn.textContent = 'Som: desligado'; if(soundBtn) soundBtn.setAttribute('aria-pressed','false'); if(mainSoundBtn) mainSoundBtn.textContent = 'Som: desligado'; }
+      guideAudio.muted = false;
+      guideAudio.volume = parseFloat(guideVolume && guideVolume.value) || 1;
       guideAudio.play().catch(()=>{});
       if(guidePlay) guidePlay.hidden = true;
       if(guidePause) guidePause.hidden = false;
@@ -371,6 +375,26 @@ if(guideAudio){
     if(guidePlayerStatus) guidePlayerStatus.textContent = 'Concluído';
   });
 }
+// Sync hidden audio track (MP3) with the video so sound plays in browsers
+// that cannot decode the video's AAC audio (e.g. Firefox on Linux).
+if(guideAudio && guideAudioTrack){
+  guideAudio.muted = true; // avoid unplayable/double AAC audio
+  guideAudioTrack.volume = parseFloat(guideVolume && guideVolume.value) || 1;
+  const syncPlay = () => {
+    try { guideAudioTrack.currentTime = guideAudio.currentTime; } catch(e){}
+    guideAudioTrack.play().catch(()=>{});
+  };
+  const syncPause = () => { guideAudioTrack.pause(); };
+  const syncSeek = () => { try { guideAudioTrack.currentTime = guideAudio.currentTime; } catch(e){} };
+  const syncVolume = () => { guideAudioTrack.volume = guideAudio.volume; guideAudioTrack.muted = guideAudio.muted; };
+  guideAudio.addEventListener('play', syncPlay);
+  guideAudio.addEventListener('pause', syncPause);
+  guideAudio.addEventListener('seeking', syncSeek);
+  guideAudio.addEventListener('seeked', syncSeek);
+  guideAudio.addEventListener('volumechange', syncVolume);
+  guideAudio.addEventListener('ended', () => { guideAudioTrack.pause(); guideAudioTrack.currentTime = 0; });
+  guideAudioTrack.addEventListener('ended', () => { guideAudio.pause(); });
+}
 if (guidePlayBtn) {
   guidePlayBtn.addEventListener('click', async () => {
     if (guidePlayBtn.disabled) return;
@@ -394,6 +418,8 @@ if (guidePlayBtn) {
     }
 
     if (guideAudio) {
+      guideAudio.muted = false;
+      guideAudio.volume = parseFloat(guideVolume && guideVolume.value) || 1;
       try {
         await guideAudio.play();
 
@@ -413,6 +439,7 @@ if (guidePlayBtn) {
 }
 // init locked
 lockGuide();
+if(guideAudio){ guideAudio.muted = false; guideAudio.volume = 1; }
 
 
 if(quizPlayBtn){
