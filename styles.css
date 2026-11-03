@@ -175,7 +175,7 @@ img{max-width:100%;display:block}
 
 /* ============ GALLERY 999 ============ */
 .gallery999{padding:24px 16px 120px;display:flex;justify-content:center}
-.gallery999__card{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;backdrop-filter:blur(10px)}
+.gallery999__card{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(10px)}
 .gallery999__title{font-size:28px;letter-spacing:.3em;color:var(--gold);margin-bottom:8px}
 .gallery999__intro{color:var(--muted);font-size:14px;margin-bottom:16px}
 .gallery999__cover{border:none;padding:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s}
@@ -183,7 +183,7 @@ img{max-width:100%;display:block}
 .gallery999__cover:hover{transform:scale(1.02);box-shadow:0 0 24px rgba(212,175,55,.4)}
 
 .lightbox999{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
-.lightbox999__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.85);backdrop-filter:blur(6px)}
+.lightbox999__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .lightbox999__content{position:relative;width:min(96vw,900px);max-height:90vh;overflow:auto;background:rgba(12,16,34,.95);border:1px solid rgba(212,175,55,.4);border-radius:20px;padding:16px}
 .lightbox999__close{position:absolute;top:10px;right:14px;font-size:22px;color:var(--gold);background:none;border:none;cursor:pointer;z-index:2}
 .lightbox999__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:28px;justify-items:center}
@@ -209,7 +209,7 @@ img{max-width:100%;display:block}
 
 /* ============ OMIKUJI ============ */
 .omikuji{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);backdrop-filter:blur(6px)}
+.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .omikuji__card{position:relative;width:min(92vw,420px);background:linear-gradient(160deg,rgba(20,24,50,.95),rgba(8,10,28,.95));border:1px solid rgba(212,175,55,.4);border-radius:22px;padding:26px 22px;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.25);animation:reveal .4s ease}
 .omikuji__label{font-size:10px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px}
 .omikuji__title{font-size:20px;letter-spacing:.2em;color:var(--yellow);margin-bottom:14px}
@@ -255,7 +255,7 @@ img{max-width:100%;display:block}
 .cookie__msg{font-size:13px;line-height:1.5;font-style:italic;margin:0}
 /* ============ OMIKUJI ============ */
 .omikuji{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);backdrop-filter:blur(6px)}
+.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .omikuji__card{position:relative;width:min(92vw,420px);background:linear-gradient(160deg,rgba(20,24,50,.95),rgba(8,10,28,.95));border:1px solid rgba(212,175,55,.4);border-radius:22px;padding:26px 22px;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.25);animation:reveal .4s ease}
 .omikuji__label{font-size:10px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px}
 .omikuji__title{font-size:20px;letter-spacing:.2em;color:var(--yellow);margin-bottom:14px}
@@ -294,7 +294,7 @@ img{max-width:100%;display:block}
 .cookie__msg{font-size:13px;line-height:1.5;font-style:italic;margin:0}
 /* ============ OMIKUJI ============ */
 .omikuji{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);backdrop-filter:blur(6px)}
+.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .omikuji__card{position:relative;width:min(92vw,420px);background:linear-gradient(160deg,rgba(20,24,50,.95),rgba(8,10,28,.95));border:1px solid rgba(212,175,55,.4);border-radius:22px;padding:26px 22px;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.25);animation:reveal .4s ease}
 .omikuji__label{font-size:10px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px}
 .omikuji__title{font-size:20px;letter-spacing:.2em;color:var(--yellow);margin-bottom:14px}
@@ -340,7 +340,7 @@ img{max-width:100%;display:block}
 .cookie__msg{font-size:13px;line-height:1.5;font-style:italic;margin:0}
 /* ============ OMIKUJI ============ */
 .omikuji{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);backdrop-filter:blur(6px)}
+.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .omikuji__card{position:relative;width:min(92vw,420px);background:linear-gradient(160deg,rgba(20,24,50,.95),rgba(8,10,28,.95));border:1px solid rgba(212,175,55,.4);border-radius:22px;padding:26px 22px;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.25);animation:reveal .4s ease}
 .omikuji__label{font-size:10px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px}
 .omikuji__title{font-size:20px;letter-spacing:.2em;color:var(--yellow);margin-bottom:14px}
@@ -387,7 +387,7 @@ img{max-width:100%;display:block}
 .cookie__msg{font-size:13px;line-height:1.5;font-style:italic;margin:0}
 /* ============ OMIKUJI ============ */
 .omikuji{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);backdrop-filter:blur(6px)}
+.omikuji__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.75);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .omikuji__card{position:relative;width:min(92vw,420px);background:linear-gradient(160deg,rgba(20,24,50,.95),rgba(8,10,28,.95));border:1px solid rgba(212,175,55,.4);border-radius:22px;padding:26px 22px;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.25);animation:reveal .4s ease}
 .omikuji__label{font-size:10px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px}
 .omikuji__title{font-size:20px;letter-spacing:.2em;color:var(--yellow);margin-bottom:14px}
@@ -531,7 +531,7 @@ img{max-width:100%;display:block}
 
 /* ============ QUIZ ============ */
 .quiz{padding:24px 16px 60px;display:flex;justify-content:center}
-.quiz__card{width:min(92vw,560px);background:url('assets/quiz-fundo.png') center/cover no-repeat;border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.quiz__card{width:min(92vw,560px);background:url('assets/quiz-fundo.png') center/cover no-repeat;border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(10px);position:relative;overflow:hidden}
 .quiz__card::before{content:'';position:absolute;inset:0;background:rgba(5,6,13,.72);z-index:0}
 .quiz__card > *{position:relative;z-index:1}
 .quiz__title{font-size:18px;letter-spacing:.25em;color:var(--gold);margin-bottom:8px;text-align:center;display:flex;flex-direction:column;align-items:center}
@@ -576,7 +576,7 @@ img{max-width:100%;display:block}
 
 /* ============ GALLERY 999 ============ */
 .gallery999{padding:24px 16px 120px;display:flex;justify-content:center}
-.gallery999__card{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;backdrop-filter:blur(10px)}
+.gallery999__card{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(10px)}
 .gallery999__title{font-size:28px;letter-spacing:.3em;color:var(--gold);margin-bottom:8px}
 .gallery999__intro{color:var(--muted);font-size:14px;margin-bottom:16px}
 .gallery999__cover{border:none;padding:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s}
@@ -584,7 +584,7 @@ img{max-width:100%;display:block}
 .gallery999__cover:hover{transform:scale(1.02);box-shadow:0 0 24px rgba(212,175,55,.4)}
 
 .lightbox999{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
-.lightbox999__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.85);backdrop-filter:blur(6px)}
+.lightbox999__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .lightbox999__content{position:relative;width:min(96vw,900px);max-height:90vh;overflow:auto;background:rgba(12,16,34,.95);border:1px solid rgba(212,175,55,.4);border-radius:20px;padding:16px}
 .lightbox999__close{position:absolute;top:10px;right:14px;font-size:22px;color:var(--gold);background:none;border:none;cursor:pointer;z-index:2}
 .lightbox999__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:28px;justify-items:center}
@@ -598,7 +598,7 @@ img{max-width:100%;display:block}
 
 /* ============ GUIDE CARD ============ */
 .guide-card{padding:24px 16px 60px;display:flex;justify-content:center}
-.guide-card__inner{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;backdrop-filter:blur(10px)}
+.guide-card__inner{width:min(92vw,560px);background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:20px;padding:22px 18px;text-align:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(10px)}
 .guide-card__play{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 18px;border-radius:12px;border:1px solid rgba(212,175,55,.4);background:rgba(10,12,30,.85);color:#fff;cursor:pointer;transition:background .2s,transform .15s,opacity .2s;font-weight:600}
 .guide-card__play:disabled{opacity:.45;cursor:not-allowed}
 .guide-card__play:not(:disabled):hover{background:rgba(255,255,255,.12);transform:translateY(-2px);box-shadow:0 0 12px rgba(212,175,55,.2)}
@@ -632,7 +632,7 @@ p, h1, h2, h3, h4, h5, h6, span, li, a, label, .quiz__option, .quiz__title, .qui
 
 /* ============ SCROLL JUSTIFICATION ============ */
 .scroll-just{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
-.scroll-just__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.7);backdrop-filter:blur(4px)}
+.scroll-just__backdrop{position:absolute;inset:0;background:rgba(5,6,13,.7);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(4px)}
 .scroll-just__card{position:relative;width:min(92vw,480px);background-color:#e8d8a8;background-image:linear-gradient(160deg,rgba(230,210,150,.95),rgba(200,180,120,.95));border:1px solid rgba(212,175,55,.6);border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 0 40px rgba(212,175,55,.3);animation:reveal .4s ease;color:#3a2a10}
 .scroll-just__status{font-size:16px;font-weight:800;letter-spacing:.15em;margin-bottom:10px}
 .scroll-just__status.is-correct{color:#1a8f4a}
