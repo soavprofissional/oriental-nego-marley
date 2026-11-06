@@ -213,18 +213,22 @@ function selectAnswer(i, btn){
   });
   if(quizFeedback){
     quizFeedback.hidden = false;
-    quizFeedback.textContent = correct ? 'Correto!' : 'Errado. A resposta correta foi destacada.';
+    quizFeedback.textContent = correct ? 'Correta' : 'Errado. A resposta correta foi destacada.';
     quizFeedback.className = 'quiz__feedback ' + (correct ? 'is-correct' : 'is-wrong');
   }
   if(btn) btn.blur();
   if(quizNext) quizNext.hidden = true;
   if(quizScoreLive) quizScoreLive.textContent = `Acertos: ${qScore} | Erros: ${qIndex + 1 - qScore}`;
-  // show scroll justification
-  showScrollJust(correct, q.justificativa || '');
+  // show scroll justification after a short delay so the answer feedback is seen first
+  qTimer = setTimeout(() => {
+    qTimer = null;
+    showScrollJust(correct, q.justificativa || '');
+  }, 1000);
 }
 
 function showScrollJust(correct, text){
   const scroll = document.getElementById('scrollJust');
+  if(qTimer){ clearTimeout(qTimer); qTimer = null; }
   const status = document.getElementById('scrollJustStatus');
   const txt = document.getElementById('scrollJustText');
   const bar = document.getElementById('scrollJustProgress');
@@ -234,10 +238,10 @@ function showScrollJust(correct, text){
   if(bar) bar.style.width = '100%';
   scroll.hidden = false;
   if(qTimer) clearTimeout(qTimer);
-  let remaining = 8;
+  let remaining = 5;
   const tick = setInterval(() => {
     remaining -= 0.1;
-    if(bar) bar.style.width = (remaining / 8 * 100) + '%';
+    if(bar) bar.style.width = (remaining / 5 * 100) + '%';
     if(remaining <= 0){
       clearInterval(tick);
       scroll.hidden = true;
